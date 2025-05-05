@@ -5,16 +5,17 @@ from datetime import datetime, timedelta
 
 tickers = ['AAPL', 'TSLA']
 
-# The DataFrames for the tickers.
+# Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
+# format.
 df_tickers = []
 
 def initialDownload() -> None:
-""" Fetches for the tickers in `tickers` and writes them out to CSV-files in Tickers/.
+    """ Fetches for the tickers in `tickers` and writes them out to CSV-files in Tickers/.
 
-We build simple DataFrames, one header like what is typical.
-Discussed here:
-https://stackoverflow.com/questions/63107594/how-to-deal-with-multi-level-column-names-downloaded-with-yfinance/63107801#63107801
-"""
+    We build simple DataFrames, one header like what is typical.
+    Discussed here:
+    https://stackoverflow.com/questions/63107594/how-to-deal-with-multi-level-column-names-downloaded-with-yfinance/63107801#63107801
+    """
     for ticker in tickers:
         #df = yf.download(ticker, period='1y', interval='1d', auto_adjust=False)
         df = yf.download(ticker, period='1y', group_by='Ticker', interval='1d', auto_adjust=False)
@@ -23,7 +24,9 @@ https://stackoverflow.com/questions/63107594/how-to-deal-with-multi-level-column
         df.to_csv(f'Tickers/{ticker}.csv')
         df_tickers.append(df)
 
+
 def fetchNewTicks() -> None:
+    """Updates the tickers to today."""
     for ticker in tickers:
         df = pd.read_csv(f'Tickers/{ticker}.csv')
 
@@ -48,6 +51,8 @@ def fetchNewTicks() -> None:
 
         df_tickers.append(merged)
 
+# TODO:
+# - Fix fetchNewTicks()
 
 def main() -> int:
     if len(sys.argv) == 2:
@@ -55,6 +60,8 @@ def main() -> int:
             initialDownload()
         elif sys.argv[1] == "c":
             fetchNewTicks()
+        
+    # Do our stuff with df_tickers.
 
     return 0
 
