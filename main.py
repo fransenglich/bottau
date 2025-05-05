@@ -4,13 +4,17 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 tickers = ['AAPL', 'TSLA']
+
+# The DataFrames for the tickers.
 df_tickers = []
 
-# We build simple DataFrames, one header like what is typical.
-# Discussed here:
-#   https://stackoverflow.com/questions/63107594/how-to-deal-with-multi-level-column-names-downloaded-with-yfinance/63107801#63107801
-#
 def initialDownload() -> None:
+""" Fetches for the tickers in `tickers` and writes them out to CSV-files in Tickers/.
+
+We build simple DataFrames, one header like what is typical.
+Discussed here:
+https://stackoverflow.com/questions/63107594/how-to-deal-with-multi-level-column-names-downloaded-with-yfinance/63107801#63107801
+"""
     for ticker in tickers:
         #df = yf.download(ticker, period='1y', interval='1d', auto_adjust=False)
         df = yf.download(ticker, period='1y', group_by='Ticker', interval='1d', auto_adjust=False)
@@ -18,7 +22,6 @@ def initialDownload() -> None:
         #df['ticker'] = ticker
         df.to_csv(f'Tickers/{ticker}.csv')
         df_tickers.append(df)
-
 
 def fetchNewTicks() -> None:
     for ticker in tickers:
