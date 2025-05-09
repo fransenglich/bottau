@@ -1,5 +1,7 @@
 import yfinance as yf
+import matplotlib.pyplot as plt
 import sys
+import ta
 import pandas as pd
 from datetime import datetime, timedelta
 
@@ -60,9 +62,36 @@ def main() -> int:
             initialDownload()
         elif sys.argv[1] == "c":
             fetchNewTicks()
+        elif sys.argv[1] == "n":
+            pass
+        else:
+            raise Exception("No or wrong commandline argument passed.")
         
-    # Do our stuff with df_tickers.
+    df = df_tickers[0]
 
+    # Bollinger Bands
+    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
+    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window=20)
+    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window=20)
+
+    # RSI
+    df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
+
+    # Create our signal
+    df["signal"] = 0
+
+    # Define our conditions
+    condition_1_buy = df["Close"] < df["BB_Lower"]
+    condition_1_sell = df["BB_Upper"] < df["Close"]
+
+    condition_2_buy = df["RSI"] < 30
+    condition_2_sell = df[f"RSI"] > 70
+
+    # Apply our conditions
+    df.loc[condition_1_buy & condition_2_buy, "signal"] = 1
+    df.loc[condition_1_sell & condition_2_sell, "signal"] = -1
+
+    df
     return 0
 
 

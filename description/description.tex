@@ -74,14 +74,42 @@
 
 \maketitle
 
-\section{Details}
+\section{Introduction}
 
-%* Draw downs. Max 20%
-%* Walk forward
-%* Trading costs
-%* Cumulative returns
-%* Sensitivity analysis
-%* Thanks
+% TODO
+% jega_tit_1993 fares well in replicating_anomalies.
+
+% - Actual performance/characteristics
+% - Preferred characteristics. Rules, requirements
+
+% * Draw downs. Max 20%
+% * Cumulative returns
+% * Walk forward
+% * Trading costs
+% * Sensitivity analysis
+% * Transaction costs
+% * Thanks
+ 
+% You can visualise/plot:
+% A. Various kinds of in-data
+% B. Features
+% C. Targets (typically a time series, independent variable)
+% D. The model
+% E. Data on performance
+
+% Your strategy/"idea" consists of:
+% - Understanding of DGP
+% - Statistical/mathematical model
+
+% Your implementation consists of:
+% - Data fetch, storage, ETL
+% - Model creation
+% - Back tests, QA, validation
+% - Live running
+
+% Moment:
+% * Is the time series stationary?
+% * Is your volatility model correct? Check for volatility clustering. ARCH test.
 
 \begin{equation*}
     \bar{u}_p = \frac{A}{C} + \frac{1}{C} \sqrt{(C\sigma^2_p - 1)(BC - A^2)},
