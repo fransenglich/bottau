@@ -56,18 +56,35 @@ def fetchNewTicks() -> None:
 # TODO:
 # - Fix fetchNewTicks()
 
+def downloadToFile():
+    df = yf.download("AAPL", interval='1d').loc["2015":]
+    df.to_csv("Tickers/AAPL.manual.csv")
+
 def main() -> int:
+    global df_tickers
+
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
             initialDownload()
         elif sys.argv[1] == "c":
             fetchNewTicks()
-        elif sys.argv[1] == "n":
-            pass
         else:
             raise Exception("No or wrong commandline argument passed.")
-        
+    else:
+        df = pd.read_csv("Tickers/IBM.csv")
+        df_tickers.append(df)
+
     df = df_tickers[0]
+
+
+    # For some reason the name differs.
+    df = df.rename(columns = {"4. close": "Close",
+                              "1. open": "Open",
+                              "2. high": "High",
+                              "3. low": "Low",
+                              "5. volume": "Volume"})
+
+    df
 
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
@@ -91,7 +108,51 @@ def main() -> int:
     df.loc[condition_1_buy & condition_2_buy, "signal"] = 1
     df.loc[condition_1_sell & condition_2_sell, "signal"] = -1
 
+    # Compute our exit signal
+    df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
+
+    # Compute the returns of each position
+    df["returns"] = df["signal"]*df["pct_close_futur"]
+
     df
+
+    # Create figure and subplots
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12,10), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})
+
+    # Plot price with moving averages and Bollinger Bands
+    ax1.plot(df['Close'], label='Closing Price', color='black')
+    ax1.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
+    ax1.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted', color='green')
+    # Plot Buy/Sell Signals
+    ax1.scatter(df.index[df['signal'] == -1], df['Close'][df['signal'] == -1], marker='v', color='red', label='Sell Signal', s=50)
+    ax1.scatter(df.index[df['signal'] == 1], df['Close'][df['signal'] == 1], marker='^', color='green', label='Buy Signal', s=50)
+
+    ax1.legend()
+    ax1.set_title("Bollinger Bands on Closing Prices - AAPL")
+    ax1.set_ylabel("Price")
+    ax1.grid()
+
+    # Plot RSI
+    ax2.plot(df['RSI'], label='RSI', color='purple')
+    ax2.axhline(70, linestyle='dashed', color='red', alpha=0.5)
+    ax2.axhline(30, linestyle='dashed', color='green', alpha=0.5)
+    ax2.set_title("Relative Strength Index (RSI)")
+    ax2.set_ylabel("RSI")
+    ax2.legend()
+    ax2.grid()
+
+    # Plot Returns
+    ax3.plot(df['returns'].cumsum(), label='Returns', color='blue')
+    ax3.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    ax3.set_title("Cumulative Returns")
+    ax3.set_ylabel("Cumulative Returns")
+    ax3.legend()
+    ax3.grid()
+
+    plt.tight_layout()
+    plt.show()
+
+
     return 0
 
 
