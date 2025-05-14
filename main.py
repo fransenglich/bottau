@@ -78,11 +78,11 @@ def main() -> int:
 
 
     # For some reason the name differs.
-    df = df.rename(columns = {"4. close": "Close",
-                              "1. open": "Open",
-                              "2. high": "High",
-                              "3. low": "Low",
-                              "5. volume": "Volume"})
+    df = df.rename(columns = {"1. open":    "Open",
+                              "2. high":    "High",
+                              "3. low":     "Low",
+                              "4. close":   "Close",
+                              "5. volume":  "Volume"})
 
     df
 
@@ -114,15 +114,16 @@ def main() -> int:
     # Compute the returns of each position
     df["returns"] = df["signal"]*df["pct_close_futur"]
 
-    df
+    print(df)
 
     # Create figure and subplots
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12,10), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(6,5), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})
 
     # Plot price with moving averages and Bollinger Bands
     ax1.plot(df['Close'], label='Closing Price', color='black')
     ax1.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
     ax1.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted', color='green')
+
     # Plot Buy/Sell Signals
     ax1.scatter(df.index[df['signal'] == -1], df['Close'][df['signal'] == -1], marker='v', color='red', label='Sell Signal', s=50)
     ax1.scatter(df.index[df['signal'] == 1], df['Close'][df['signal'] == 1], marker='^', color='green', label='Buy Signal', s=50)
@@ -150,8 +151,10 @@ def main() -> int:
     ax3.grid()
 
     plt.tight_layout()
-    plt.show()
 
+    fig.savefig("output.svg")
+
+    plt.show()
 
     return 0
 
