@@ -72,6 +72,10 @@ def main() -> int:
             raise Exception("No or wrong commandline argument passed.")
     else:
         df = pd.read_csv("Tickers/IBM.csv")
+
+        # Reverse, get increasing dates. Specific to IBM.csv.
+        df = df[::-1]
+
         df_tickers.append(df)
 
     df = df_tickers[0]
@@ -151,6 +155,8 @@ def main() -> int:
     ax3.grid()
 
     plt.tight_layout()
+
+    df.to_csv("df.csv")
 
     fig.savefig("output.svg")
 
