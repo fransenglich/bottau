@@ -147,6 +147,7 @@ def main() -> int:
     ax2.grid()
 
     # Plot Returns
+    # See correct computation below, this doesn't account for compounding.
     ax3.plot(df['returns'].cumsum(), label='Returns', color='blue')
     ax3.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     ax3.set_title("Cumulative Returns")
@@ -156,13 +157,31 @@ def main() -> int:
 
     plt.tight_layout()
 
-    df.to_csv("df.csv")
-
     fig.savefig("output.svg")
+
+    # ---------- New fig
+    # 1 + & cumprod() because 'returns' are not log returns.
+    df['cumulative_returns'] = (1 + df['returns']).cumprod()
+
+    df['cumulative_max'] = df['cumulative_returns'].cummax()
+
+    drawdown = (df['cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
+
+    plt.figure(figsize = (6, 4))
+    drawdown.plot(label="Drawdown")
+    plt.title("Drawdown")
+    plt.legend()
+    plt.show()
+
+    plt.savefig('cumulative_returns.svg')
+    # --------------------
+
+    df.to_csv("df.csv")
 
     plt.show()
 
     return 0
 
 
-main()
+if __name__ == "__main__":
+    main()
