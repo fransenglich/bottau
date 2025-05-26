@@ -1,5 +1,8 @@
 
 
+# Only on MS Windows.
+import metatrader5 as mt5
+
 # Code from: https://medium.com/@Quantreo/metatrader5-live-trading-using-python-22889abc1e0b
 
 def get_data(symbol, n, timeframe=mt5.TIMEFRAME_D1):
