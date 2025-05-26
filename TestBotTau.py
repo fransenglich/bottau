@@ -1,8 +1,8 @@
 import unittest
 
-class TestStrategy(unittest.TestCase):
+class TestBotTau(unittest.TestCase):
 
-    def test_internetconnected(self):
+    def test_internetConnected(self):
         pass
     
     def test_initialize(self):
@@ -11,7 +11,7 @@ class TestStrategy(unittest.TestCase):
     def test_main(self):
         pass
 
-    def test_external_exec(self):
+    def test_externalExec(self):
         pass
 
 

@@ -1,6 +1,10 @@
 # Only on MS Windows.
 import metatrader5 as mt5
 
+import datetime
+
+import BotTau
+
 # Code from: https://medium.com/@Quantreo/metatrader5-live-trading-using-python-22889abc1e0b
 
 def get_data(symbol, n, timeframe=mt5.TIMEFRAME_D1):
@@ -214,6 +218,7 @@ def close_all_night():
             res = MT5.orders(row["symbol"][0], row["volume"][0], buy=False, id_position=row["ticket"][0])
 
 
+# See https://github.com/Quantreo/UDEMY-Algorithmic-trading-from-A-TO-Z-USING-PYTHON/blob/main/Chapter_08_MT5.py
 from Chapter_08_MT5 import *
 import warnings
 warnings.filterwarnings("ignore")
