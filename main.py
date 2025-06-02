@@ -172,11 +172,12 @@ def main() -> int:
     # 1 + & cumprod() because 'returns' are not log returns.
     df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
     df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
-    df['drawdown'] = (df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
+    df['drawdown'] = ((df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']) * 100
 
     plt.figure(figsize=def_figsize)
     plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
+    plt.ylabel("Drawdown %")
     plt.legend()
     plt.savefig("generated/drawdown.png")
 
@@ -189,7 +190,7 @@ def main() -> int:
 
 
     # ---- Write constants ----
-    drawdown_max = round(abs(df['drawdown'].min()) * 100, 2) # Percent
+    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
     print(f"Max drawdown: {drawdown_max}")
 
     with open("generated/constants.tex", "w") as f:

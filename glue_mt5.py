@@ -1,4 +1,5 @@
 # Only on MS Windows.
+import MT5
 import metatrader5 as mt5
 
 import datetime
