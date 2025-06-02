@@ -88,6 +88,8 @@ def main() -> int:
                               "4. close":   "Close",
                               "5. volume":  "Volume"})
 
+    df["date"] = pd.to_datetime(df["date"])
+
     df
 
     # Bollinger Bands
