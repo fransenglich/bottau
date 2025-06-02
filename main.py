@@ -193,7 +193,10 @@ def main() -> int:
     print(f"Max drawdown: {drawdown_max}")
 
     with open("generated/constants.tex", "w") as f:
-        f.write(f"\def\constant_maxdrawdown{{{drawdown_max}}}")
+        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
+
+        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
+        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
 
 
     # ---- Returns ----
@@ -214,7 +217,7 @@ def main() -> int:
     plt.savefig("generated/returns_dist.png")
 
 
-    # ---- Cum sum returns ----
+    # ---- Cumulative Returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
     plt.figure(figsize=def_figsize)
     plt.plot(df['cumulative_returns'], label='Returns')
