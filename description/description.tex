@@ -48,6 +48,32 @@ strategy. It does not describe the strategy itself, which is proprietary.
 
 The dataset stretches from \constantStartdate to \constantEnddate.
 
+\section{Features}
+
+Also called signals. The features used are as follows.
+
+\section{Targets}
+
+\section{Model}
+
+\section{Drawdown}
+
+Maximum drawdown is \constantMaxdrawdown \%. We consider 20 \% an acceptable maximum.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics{../generated/drawdown.png}
+    \end{center}
+    %\caption{}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics{../generated/drawdown_dist.png}
+    \end{center}
+    %\caption{}
+\end{figure}
+
 \section{Returns}
 
 \begin{figure}[H]
@@ -67,24 +93,22 @@ However, we close the position, meaning compounding isn't relevant.
     %\caption{}
 \end{figure}
 
+The transaction cost, $C$, is calculated using the formula, where $t$ is the trade amount:
 
-\section{Drawdown}
+\begin{equation}
+\label{eq:NPV_L}
+C = \constantTransactionCommission * t + spread/2
+\end{equation}
 
-Maximum drawdown is \constantMaxdrawdown \%. We consider 20 \% an acceptable maximum.
 
+% TODO transaction costs
 \begin{figure}[H]
     \begin{center}
-        \includegraphics{../generated/drawdown.png}
+        \includegraphics{../generated/cumulative_returns_except_trans_costs.png}
     \end{center}
     %\caption{}
 \end{figure}
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/drawdown_dist.png}
-    \end{center}
-    %\caption{}
-\end{figure}
 
 %\printbibliography
 %\appendix

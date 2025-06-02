@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 tickers = ['AAPL', 'TSLA']
 
 def_figsize = (4.7, 4)
+transaction_commission = 0.02
+
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
 df_tickers = []
@@ -189,17 +191,6 @@ def main() -> int:
     plt.savefig("generated/drawdown_dist.png")
 
 
-    # ---- Write constants ----
-    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
-    print(f"Max drawdown: {drawdown_max}")
-
-    with open("generated/constants.tex", "w") as f:
-        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
-
-        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
-        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
-
-
     # ---- Returns ----
     plt.figure(figsize=def_figsize)
     plt.plot(df['returns'], label='Returns')
@@ -224,10 +215,38 @@ def main() -> int:
     plt.plot(df['cumulative_returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns")
-    plt.ylabel("Cumulative Returns")
+    plt.ylabel("Returns")
     plt.legend()
     plt.grid()
     plt.savefig("generated/cumulative_returns.png")
+
+    # ---- Cumulative Returns Minus Transcation Costs ----
+    # TODO numba
+    def transaction_cost(trade):
+        global transaction_commission
+        return trade - (transaction_commission + trade/2)
+
+    df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
+
+    plt.figure(figsize=def_figsize)
+    plt.plot(df['cum_with_trans'], label='Netted returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Cumulative Returns Minus Transaction Costs")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    plt.savefig("generated/cumulative_returns_except_trans_costs.png")
+
+
+    # ---- Write constants ----
+    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
+    print(f"Max drawdown: {drawdown_max}")
+
+    with open("generated/constants.tex", "w") as f:
+        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
+        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
+        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
+        f.write(f"\n\def\constantTransactionCommission{{{transaction_commission}}}")
 
 
     df.to_csv("generated/df.csv")
