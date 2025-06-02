@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import sys
 import ta
 import pandas as pd
+import numpy as np
 from datetime import datetime, timedelta
 
 tickers = ['AAPL', 'TSLA']
 
-def_figsize = (5, 4)
+def_figsize = (4.7, 4)
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
 df_tickers = []
@@ -167,7 +168,7 @@ def main() -> int:
 
 
 
-    # ---- Compounding log returns ----
+    # ---- Drawdown ----
     # 1 + & cumprod() because 'returns' are not log returns.
     df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
     df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
@@ -178,6 +179,13 @@ def main() -> int:
     plt.title("Drawdown")
     plt.legend()
     plt.savefig("generated/drawdown.png")
+
+
+    # ---- Drawdown Histogram----
+    plt.figure(figsize=def_figsize)
+    plt.hist(df['drawdown'], bins='auto')
+    plt.title("Drawdown Distribution")
+    plt.savefig("generated/drawdown_dist.png")
 
 
     # ---- Write constants ----
@@ -197,6 +205,13 @@ def main() -> int:
     plt.legend()
     plt.grid()
     plt.savefig("generated/returns.png")
+
+
+    # ---- Returns Histogram----
+    plt.figure(figsize=def_figsize)
+    plt.hist(df['returns'], bins='auto')
+    plt.title("Returns Distribution")
+    plt.savefig("generated/returns_dist.png")
 
 
     # ---- Cum sum returns ----
