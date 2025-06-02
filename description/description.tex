@@ -4,6 +4,8 @@
 
 \usepackage{csquotes}
 
+\usepackage{float}
+
 \usepackage[
     backend=biber,
     style=authoryear-icomp,
@@ -42,11 +44,21 @@
 This document documents the simulated in-sample performance of Bot Tau's trading
 strategy. It does not document the strategy itself, which is proprietary.
 
+\section{Cumulative Returns}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics{../generated/cumulative_returns.png}
+    \end{center}
+    %\caption{}
+\end{figure}
+
+
 \section{Drawdown}
 
 Maximum drawdown is \constant_maxdrawdown \%.
 
-\begin{figure}
+\begin{figure}[H]
     \begin{center}
         \includegraphics{../generated/drawdown.png}
     \end{center}

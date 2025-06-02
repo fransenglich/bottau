@@ -178,7 +178,7 @@ def main() -> int:
 
     df['drawdown'] = (df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
 
-    plt.figure()
+    plt.figure(figsize=(5, 4))
     plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
     plt.legend()
@@ -195,7 +195,7 @@ def main() -> int:
 
     # ---- Cum sum returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
-    plt.figure()
+    plt.figure(figsize=(5, 4))
     plt.plot(df['cumulative_returns'], label='Returns', color='blue')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns")
