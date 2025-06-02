@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 tickers = ['AAPL', 'TSLA']
 
+def_figsize = (5, 4)
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
 df_tickers = []
@@ -62,6 +63,7 @@ def downloadToFile():
 
 def main() -> int:
     global df_tickers
+    global def_figsize
 
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
@@ -88,7 +90,7 @@ def main() -> int:
                               "4. close":   "Close",
                               "5. volume":  "Volume"})
 
-    df["date"] = pd.to_datetime(df["date"])
+    df["date"] = pd.to_datetime(df["date"]) #, format='%Y-%b-%d')
 
     df
 
@@ -148,13 +150,6 @@ def main() -> int:
     ax2.legend()
     ax2.grid()
 
-    # Plot Returns
-    # See correct computation below, this doesn't account for compounding.
-
-
-
-
-
 
 
     # ------------------- Plot and save figs -----------------------------
@@ -168,25 +163,22 @@ def main() -> int:
 
     plt.tight_layout()
 
-    fig.savefig("output.png")
+    fig.savefig("generated/output.png")
 
 
 
     # ---- Compounding log returns ----
     # 1 + & cumprod() because 'returns' are not log returns.
     df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
-
     df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
-
     df['drawdown'] = (df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
 
-    plt.figure(figsize=(5, 4))
+    plt.figure(figsize=def_figsize)
     plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
     plt.legend()
-
     plt.savefig("generated/drawdown.png")
-    # --------------------
+
 
     # ---- Write constants ----
     drawdown_max = round(abs(df['drawdown'].min()) * 100, 2) # Percent
@@ -195,10 +187,22 @@ def main() -> int:
     with open("generated/constants.tex", "w") as f:
         f.write(f"\def\constant_maxdrawdown{{{drawdown_max}}}")
 
+
+    # ---- Returns ----
+    plt.figure(figsize=def_figsize)
+    plt.plot(df['returns'], label='Returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Returns")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    plt.savefig("generated/returns.png")
+
+
     # ---- Cum sum returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
-    plt.figure(figsize=(5, 4))
-    plt.plot(df['cumulative_returns'], label='Returns', color='blue')
+    plt.figure(figsize=def_figsize)
+    plt.plot(df['cumulative_returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns")
     plt.ylabel("Cumulative Returns")
@@ -207,9 +211,7 @@ def main() -> int:
     plt.savefig("generated/cumulative_returns.png")
 
 
-    df.to_csv("df.csv")
-
-    #plt.show()
+    df.to_csv("generated/df.csv")
 
     return 0
 
