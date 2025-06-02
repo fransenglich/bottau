@@ -13,50 +13,15 @@
     eprint=false
 ]{biblatex}
 
-\addbibresource{references.bib}
+%\addbibresource{references.bib}
+
+\input{../generated/constants.tex}
 
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage[english]{babel}
 \usepackage[bookmarks=true]{hyperref}
-\usepackage{color}
-\usepackage{listings}
-
-\usepackage[
-    type={CC},
-    modifier={by-nc-sa},
-    version={3.0},
-]{doclicense}
-
-\usepackage{xcolor}
-% New colors defined below.
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-%Code listing style named "mystyle"
-\lstdefinestyle{mystyle}{
-%  backgroundcolor=\color{backcolour},
-  commentstyle=\color{codegreen},
-  keywordstyle=\color{magenta},
-  numberstyle=\tiny\color{codegray},
-  stringstyle=\color{codepurple},
-  basicstyle=\ttfamily\footnotesize,
-  breakatwhitespace=false,
-  breaklines=true,
-  keepspaces=true,
-  numbers=left,
-  numbersep=5pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  tabsize=2
-}
-
-%"mystyle" code listing set
-\lstset{style=mystyle}
 
 \def\documenttitle{Description of Bot Tau}
 
@@ -74,90 +39,21 @@
 
 \maketitle
 
-\section{Introduction}
+This document documents the simulated in-sample performance of Bot Tau's trading
+strategy. It does not document the strategy itself, which is proprietary.
 
-% TODO
-% jega_tit_1993 fares well in replicating_anomalies.
+\section{Drawdown}
 
-% - Actual performance/characteristics
-% - Preferred characteristics. Rules, requirements
+Maximum drawdown is \constant_maxdrawdown \%.
 
-% * Draw downs. Max 20%. Maximum drawdowns.
-% * Annualized return (vs. CAGR?)
-% * Cumulative returns
-% * Walk forward
-% * Trading costs
-% * Sensitivity analysis
-% * Transaction costs
-% * Thanks
- 
-% You can visualise/plot:
-% A. Various kinds of in-data
-% B. Features
-% C. Targets (typically a time series, independent variable)
-% D. The model
-% E. Data on performance
-%   E1. With/without costs
+\begin{figure}
+    \begin{center}
+        \includegraphics{../generated/drawdown.png}
+    \end{center}
+    %\caption{}
+\end{figure}
 
-% Your strategy/"idea" consists of:
-% - Understanding of DGP
-% - Statistical/mathematical model
-
-% Strategy optmisation:
-% - max parameters
-
-% Your implementation consists of:
-% - Data fetch, storage, ETL
-% - Model creation
-% - Back tests, QA, validation
-% - Live running
-
-% Features:
-% - Aim your features on the target. What data does that target need? What precedes that target in the data?
-% - Regime dependence: Be aware of regime: trending or ranging?
-% - Select features based on time: in which time window is the model to
-%   act(target horizon)? Calibrate the feature window accordingly.
-
-% Backtesting:
-% - Analysis of drawdown
-% Lucas:
-% - Walk-forward optimization
-% - Monte Carlo
-% - CPCV
-% - Sensitivity tests
-% - Stress scenarios
-% - Costs, slippage, regime shifts, order type, ...
-% 
-% Live:
-% - Market or limit orders. Buy/sell long. Avoid short, or with stop limit?
-
-% Risks:
-% - Operational. Mitigation: keep tech simple
-% - Faulty strategy. M1: Do excellent robust testing
-%                    M2: Monitor
-%                    M3: Review
-%                    M4: Suitable order types
-
-% Moment:
-% * Is the time series stationary?
-% * Is your volatility model correct? Check for volatility clustering. ARCH test.
-
-\begin{equation*}
-    \bar{u}_p = \frac{A}{C} + \frac{1}{C} \sqrt{(C\sigma^2_p - 1)(BC - A^2)},
-\end{equation*}
-
-\section{Remaining Questions}
-
-\printbibliography
-
-\appendix
-
-\section{Code}
-
-%\lstinputlisting[language=Matlab, caption=Matlab code]{plan.m}
-
-\section{License}
-
-\doclicenseThis
+%\printbibliography
+%\appendix
 
 \end{document}

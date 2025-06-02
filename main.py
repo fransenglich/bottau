@@ -148,6 +148,15 @@ def main() -> int:
 
     # Plot Returns
     # See correct computation below, this doesn't account for compounding.
+
+
+
+
+
+
+
+    # ------------------- Plot and save figs -----------------------------
+
     ax3.plot(df['returns'].cumsum(), label='Returns', color='blue')
     ax3.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     ax3.set_title("Cumulative Returns")
@@ -157,28 +166,48 @@ def main() -> int:
 
     plt.tight_layout()
 
-    fig.savefig("output.svg")
+    fig.savefig("output.png")
 
-    # ---------- New fig
+
+
+    # ---- Compounding log returns ----
     # 1 + & cumprod() because 'returns' are not log returns.
-    df['cumulative_returns'] = (1 + df['returns']).cumprod()
+    df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
 
-    df['cumulative_max'] = df['cumulative_returns'].cummax()
+    df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
 
-    drawdown = (df['cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
+    df['drawdown'] = (df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']
 
-    plt.figure(figsize = (6, 4))
-    drawdown.plot(label="Drawdown")
+    plt.figure()
+    plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
     plt.legend()
-    plt.show()
 
-    plt.savefig('cumulative_returns.svg')
+    plt.savefig("generated/drawdown.png")
     # --------------------
+
+    # ---- Write constants ----
+    drawdown_max = round(abs(df['drawdown'].min()) * 100, 2) # Percent
+    print(f"Max drawdown: {drawdown_max}")
+
+    with open("generated/constants.tex", "w") as f:
+        f.write(f"\def\constant_maxdrawdown{{{drawdown_max}}}")
+
+    # ---- Cum sum returns ----
+    df['cumulative_returns'] = df['returns'].cumsum()
+    plt.figure()
+    plt.plot(df['cumulative_returns'], label='Returns', color='blue')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Cumulative Returns")
+    plt.ylabel("Cumulative Returns")
+    plt.legend()
+    plt.grid()
+    plt.savefig("generated/cumulative_returns.png")
+
 
     df.to_csv("df.csv")
 
-    plt.show()
+    #plt.show()
 
     return 0
 

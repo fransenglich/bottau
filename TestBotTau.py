@@ -2,13 +2,13 @@ import unittest
 
 class TestBotTau(unittest.TestCase):
 
-    def test_internetConnected(self):
-        pass
-
     def test_dependencies(self):
         # TODO Check Python, Pandas, NumPy
         pass
     
+    def test_internetConnected(self):
+        pass
+
     def test_initialize(self):
         pass
 
