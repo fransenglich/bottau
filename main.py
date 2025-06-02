@@ -81,7 +81,7 @@ def main() -> int:
 
         df_tickers.append(df)
 
-    df = df_tickers[0]
+    df: pd.DataFrame = df_tickers[0]
 
 
     # For some reason the name differs.
