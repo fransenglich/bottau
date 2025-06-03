@@ -247,7 +247,7 @@ def main() -> int:
         f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
         f.write(f"\n\def\constantTransactionCommission{{{transaction_commission}}}")
 
-        rmean = round(df['returns'].mean(), 4)
+        rmean = round(df['returns'].mean() * 100, 4)
         std = round(df['returns'].std(), 4)
         sr = round(rmean/std, 4)
         f.write(f"\n\def\constantRMean{{{rmean}}}")
