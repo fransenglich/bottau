@@ -221,7 +221,6 @@ def main() -> int:
     plt.savefig("generated/cumulative_returns.png")
 
     # ---- Cumulative Returns Minus Transcation Costs ----
-    # TODO numba
     def transaction_cost(trade):
         global transaction_commission
         return trade - (transaction_commission + trade/2)
@@ -247,6 +246,13 @@ def main() -> int:
         f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
         f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
         f.write(f"\n\def\constantTransactionCommission{{{transaction_commission}}}")
+
+        rmean = round(df['returns'].mean(), 4)
+        std = round(df['returns'].std(), 4)
+        sr = round(rmean/std, 4)
+        f.write(f"\n\def\constantRMean{{{rmean}}}")
+        f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
+        f.write(f"\n\def\constantStd{{{std}}}")
 
 
     df.to_csv("generated/df.csv")

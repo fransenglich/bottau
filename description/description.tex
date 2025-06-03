@@ -50,7 +50,8 @@ The dataset stretches from \constantStartdate to \constantEnddate.
 
 \section{Features}
 
-Also called signals. The features used are as follows.
+Some form of property, typically derived from the OLHCV. An example is
+volatility. The features used are as follows.
 
 \section{Targets}
 
@@ -75,6 +76,21 @@ Maximum drawdown is \constantMaxdrawdown \%. We consider 20 \% an acceptable max
 \end{figure}
 
 \section{Returns}
+
+\begin{table}[H]
+\begin{center}
+\caption{Statistics of returns.}
+\begin{tabular}{ |l|p{4in}| }
+ \hline
+Mean returns            & \constantRMean        \\
+\hline
+Standard deviation (SD) & \constantStd          \\
+ \hline
+ Sharpe Ratio (SR)      & \constantSharpeRatio  \\
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \begin{figure}[H]
     \begin{center}
@@ -101,7 +117,6 @@ C = \constantTransactionCommission * t + spread/2
 \end{equation}
 
 
-% TODO transaction costs
 \begin{figure}[H]
     \begin{center}
         \includegraphics{../generated/cumulative_returns_except_trans_costs.png}
