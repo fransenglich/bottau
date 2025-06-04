@@ -154,7 +154,6 @@ def main() -> int:
     ax2.grid()
 
 
-
     # ------------------- Plot and save figs -----------------------------
 
     ax3.plot(df['returns'].cumsum(), label='Returns', color='blue')
@@ -168,6 +167,7 @@ def main() -> int:
 
     fig.savefig("generated/output.png")
 
+    # ---- Plot Features ----
 
 
     # ---- Drawdown ----
@@ -253,7 +253,6 @@ def main() -> int:
         f.write(f"\n\def\constantRMean{{{rmean}}}")
         f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\def\constantStd{{{std}}}")
-
 
     df.to_csv("generated/df.csv")
 
