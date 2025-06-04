@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 tickers = ['AAPL', 'TSLA']
 
-def_figsize = (4.7, 4)
+def_figsize = (6, 4)
 transaction_commission = 0.02
 
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
@@ -67,6 +67,9 @@ def downloadToFile():
 def main() -> int:
     global df_tickers
     global def_figsize
+
+    def savefig(plt, basename):
+        plt.savefig(f"generated/{basename}.png")
 
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
@@ -141,7 +144,7 @@ def main() -> int:
     plt.title("Bollinger Bands on Closing Prices - AAPL")
     plt.ylabel("Price")
     plt.grid()
-    plt.savefig("generated/feature_BollingerBands.png")
+    savefig(plt, "feature_BollingerBands")
 
     # Plot RSI
     plt.figure(figsize=def_figsize)
@@ -152,7 +155,7 @@ def main() -> int:
     plt.ylabel("RSI")
     plt.legend()
     plt.grid()
-    plt.savefig("generated/feature_RSI.png")
+    savefig(plt, "feature_RSI")
 
 
     # ---- Drawdown ----
@@ -166,14 +169,14 @@ def main() -> int:
     plt.title("Drawdown")
     plt.ylabel("Drawdown %")
     plt.legend()
-    plt.savefig("generated/drawdown.png")
+    savefig(plt, "drawdown")
 
 
     # ---- Drawdown Histogram----
     plt.figure(figsize=def_figsize)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
-    plt.savefig("generated/drawdown_dist.png")
+    savefig(plt, "drawdown_dist")
 
 
     # ---- Returns ----
@@ -184,14 +187,14 @@ def main() -> int:
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    plt.savefig("generated/returns.png")
+    savefig(plt, "returns")
 
 
     # ---- Returns Histogram----
     plt.figure(figsize=def_figsize)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
-    plt.savefig("generated/returns_dist.png")
+    savefig(plt, "returns_dist")
 
 
     # ---- Cumulative Returns ----
@@ -203,7 +206,7 @@ def main() -> int:
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    plt.savefig("generated/cumulative_returns.png")
+    savefig(plt, "cumulative_returns")
 
     # ---- Cumulative Returns Minus Transcation Costs ----
     def transaction_cost(trade):
@@ -219,7 +222,7 @@ def main() -> int:
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    plt.savefig("generated/cumulative_returns_except_trans_costs.png")
+    savefig(plt, "cumulative_returns_except_trans_costs")
 
 
     # ---- Write constants ----

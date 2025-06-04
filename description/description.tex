@@ -37,6 +37,15 @@
     pdftitle = {\documenttitle}
 }
 
+\newcommand{\figureTau}[1]{
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics{../generated/#1.png}
+        \end{center}
+        %\caption{}
+    \end{figure}
+}
+
 \begin{document}
 
 \maketitle
@@ -53,19 +62,9 @@ The dataset stretches from \constantStartdate to \constantEnddate.
 Some form of property, typically derived from the OLHCV. An example is
 volatility. The features used are as follows.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/feature_BollingerBands.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{feature_BollingerBands}
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/feature_RSI.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{feature_RSI}
 
 \section{Targets}
 
@@ -75,19 +74,9 @@ volatility. The features used are as follows.
 
 Maximum drawdown is \constantMaxdrawdown \%. We consider 20\% an acceptable maximum.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/drawdown.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{drawdown}
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/drawdown_dist.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{drawdown_dist}
 
 \section{Returns}
 
@@ -106,22 +95,12 @@ Maximum drawdown is \constantMaxdrawdown \%. We consider 20\% an acceptable maxi
 \end{center}
 \end{table}
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/returns.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{returns}
 
 The cumulative returns are not compounding, while the annualized returns are.
 However, we close the position, meaning compounding isn't relevant.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/cumulative_returns.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{cumulative_returns}
 
 The transaction cost, $C$, is calculated using the formula, where $t$ is the trade amount:
 
@@ -130,13 +109,7 @@ The transaction cost, $C$, is calculated using the formula, where $t$ is the tra
 C = \constantTransactionCommission * t + spread/2
 \end{equation}
 
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{../generated/cumulative_returns_except_trans_costs.png}
-    \end{center}
-    %\caption{}
-\end{figure}
+\figureTau{cumulative_returns_except_trans_costs}
 
 
 %\printbibliography
