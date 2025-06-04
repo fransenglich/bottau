@@ -127,9 +127,6 @@ def main() -> int:
 
     print(df)
 
-    # Create figure and subplots
-    #fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(6,5), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})
-
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=def_figsize)
     plt.plot(df['Close'], label='Closing Price', color='black')
@@ -156,22 +153,6 @@ def main() -> int:
     plt.legend()
     plt.grid()
     plt.savefig("generated/feature_RSI.png")
-
-
-    # ------------------- Plot and save figs -----------------------------
-
-    #ax3.plot(df['returns'].cumsum(), label='Returns', color='blue')
-    #ax3.axhline(0, linestyle='dashed', color='black', alpha=0.5)
-    #ax3.set_title("Cumulative Returns")
-    #ax3.set_ylabel("Cumulative Returns")
-    #ax3.legend()
-    #ax3.grid()
-
-    plt.tight_layout()
-
-    #fig.savefig("generated/output.png")
-
-    # ---- Plot Features ----
 
 
     # ---- Drawdown ----
