@@ -25,7 +25,7 @@
 \usepackage[english]{babel}
 \usepackage[bookmarks=true]{hyperref}
 
-\def\documenttitle{Performance Description of Bot Tau}
+\def\documenttitle{Description of Bot Tau}
 
 \title{\documenttitle}
 \date{\today}
@@ -50,8 +50,15 @@
 
 \maketitle
 
+\tableofcontents
+
 This document describes the simulated in-sample performance of Bot Tau's trading
 strategy. It does not describe the strategy itself, which is proprietary.
+
+\section{Trading Plan}
+
+The object is to trade assets TODO. We close positions at end of each trading day, because we don't want overnight exposure.
+% p. 304
 
 \section{The Dataset}
 
@@ -70,7 +77,8 @@ volatility. The features used are as follows.
 
 \section{Model}
 
-\section{Drawdown}
+\section{Back Test}
+\subsection{Drawdown}
 
 Maximum drawdown is \constantMaxdrawdown \%. We consider 20\% an acceptable maximum.
 
@@ -78,7 +86,7 @@ Maximum drawdown is \constantMaxdrawdown \%. We consider 20\% an acceptable maxi
 
 \figureTau{drawdown_dist}
 
-\section{Returns}
+\subsection{Returns}
 
 \begin{table}[H]
 \begin{center}
@@ -111,6 +119,15 @@ C = \constantTransactionCommission * t + spread/2
 
 \figureTau{cumulative_returns_except_trans_costs}
 
+\section{Live Performance}
+
+The plan is to paper trade in a one month incubation period.
+
+TODO compare return dist to back test return using Kolmogorov statistical test. % p. 311.
+
+\subsection{Trading Journal}
+
+No trading have taken place, so nothing here yet.
 
 %\printbibliography
 %\appendix
