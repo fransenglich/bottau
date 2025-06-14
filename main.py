@@ -116,7 +116,7 @@ def main() -> int:
     condition_1_sell = df["BB_Upper"] < df["Close"]
 
     condition_2_buy = df["RSI"] < 30
-    condition_2_sell = df[f"RSI"] > 70
+    condition_2_sell = df["RSI"] > 70
 
     # Apply our conditions
     df.loc[condition_1_buy & condition_2_buy, "signal"] = 1
