@@ -3,3 +3,4 @@ Tickers/
 .DS_Store
 output.svg
 df.csv
+*.pyc
