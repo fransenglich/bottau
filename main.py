@@ -352,7 +352,7 @@ def main() -> int:
     fig, ax = plt.subplots()
     im, cbar = heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
                        cmap="YlGn", cbarlabel="Correlation coefficient")
-    texts = annotate_heatmap(im, valfmt="{x:.1f} t")
+    texts = annotate_heatmap(im, valfmt="{x:.1f}")
 
     fig.tight_layout()
 
