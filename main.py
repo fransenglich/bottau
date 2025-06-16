@@ -236,7 +236,7 @@ def main() -> int:
     fig, ax = plt.subplots()
     im, cbar = heatmap.heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
                                cmap="YlGn", cbarlabel="Correlation coefficient")
-    texts = heatmap.annotate_heatmap(im, valfmt="{x:.1f}")
+    texts = heatmap.annotate_heatmap(im)
 
     ax.set_title("Heatmap of correlation matrix of features and targets")
 
