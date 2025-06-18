@@ -68,9 +68,6 @@ def downloadToFile():
     df.to_csv("Tickers/AAPL.manual.csv")
 
 def main() -> int:
-    global df_tickers
-    global def_figsize
-    global rolling_window_size
 
     def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
         plt.savefig(f"generated/{basename}.png")
@@ -247,7 +244,6 @@ def main() -> int:
 
     # ---- Cumulative Returns Minus Transcation Costs ----
     def transaction_cost(trade):
-        global transaction_commission
         return trade - (transaction_commission + trade/2)
 
     df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
