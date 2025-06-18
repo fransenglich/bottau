@@ -243,7 +243,7 @@ def main() -> int:
 
 
     # ---- Cumulative Returns Minus Transcation Costs ----
-    def transaction_cost(trade):
+    def transaction_cost(trade: float) -> float:
         return trade - (transaction_commission + trade/2)
 
     df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
