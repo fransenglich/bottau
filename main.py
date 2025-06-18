@@ -8,16 +8,18 @@ import quantreo.features_engineering as fe
 import pandas as pd
 import numpy as np
 
-tickers = ['AAPL', 'TSLA']
-def_figsize = (6, 4)
-transaction_commission = 0.02
-rolling_window_size = 30
+# Constants
+# ----------------------------------------------
+TICKERS = ['AAPL', 'TSLA']
+DEFAULT_FIGSIZE = (6, 4)
+TRANSACTION_COMMISSION = 0.02
+ROLLING_WINDOW_SIZE = 30
 
 # See Lucas' book, p. 295.
 # Take-profit
-tp = 0.021
+TP = 0.021
 # Stop loss
-sl = 0.09
+SL = 0.09
 
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
@@ -88,7 +90,7 @@ def main() -> int:
     print(df)
 
     # Plot price with moving averages and Bollinger Bands
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
     plt.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
     plt.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted', color='green')
@@ -104,7 +106,7 @@ def main() -> int:
     savefig(plt, "feature_BollingerBands")
 
     # Plot RSI
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['RSI'], label='RSI', color='purple')
     plt.axhline(70, linestyle='dashed', color='red', alpha=0.5)
     plt.axhline(30, linestyle='dashed', color='green', alpha=0.5)
@@ -121,7 +123,7 @@ def main() -> int:
     df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
     df['drawdown'] = ((df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']) * 100
 
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
     plt.ylabel("Drawdown %")
@@ -130,14 +132,14 @@ def main() -> int:
 
 
     # ---- Drawdown Histogram----
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
     savefig(plt, "drawdown_dist")
 
 
     # ---- Returns ----
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Returns")
@@ -148,7 +150,7 @@ def main() -> int:
 
 
     # ---- Returns Histogram----
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
     savefig(plt, "returns_dist")
@@ -156,7 +158,7 @@ def main() -> int:
 
     # ---- Cumulative Returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['cumulative_returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns")
@@ -169,8 +171,8 @@ def main() -> int:
     # ---- corr matrix ----
     indicators: pd.DataFrame = []
     indicators.append(df['pct_close_futur'])
-    df['var'] = df['pct_close_futur'].rolling(window = rolling_window_size).var()
-    df['parkinsons_var'] = fe.volatility.parkinson_volatility(df, window_size=rolling_window_size,
+    df['var'] = df['pct_close_futur'].rolling(window = ROLLING_WINDOW_SIZE).var()
+    df['parkinsons_var'] = fe.volatility.parkinson_volatility(df, window_size=ROLLING_WINDOW_SIZE,
                                                               high_col = "High", low_col="Low")
     indicators.append(df['var'])
     indicators.append(df['parkinsons_var'])
@@ -200,11 +202,11 @@ def main() -> int:
 
     # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
-        return trade - (transaction_commission + trade/2)
+        return trade - (TRANSACTION_COMMISSION + trade/2)
 
     df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
 
-    plt.figure(figsize=def_figsize)
+    plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['cum_with_trans'], label='Netted returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns Minus Transaction Costs")
@@ -222,7 +224,7 @@ def main() -> int:
         f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
         f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
         f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
-        f.write(f"\n\def\constantTransactionCommission{{{transaction_commission}}}")
+        f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
 
         rmean = round(df['returns'].mean() * 100, 4)
         std = round(df['returns'].std(), 4)
