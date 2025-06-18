@@ -242,7 +242,7 @@ def main() -> int:
     savefig(fig, "corrmatrix")
 
 
-    # ---- Cumulative Returns Minus Transcation Costs ----
+    # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
         return trade - (transaction_commission + trade/2)
 
