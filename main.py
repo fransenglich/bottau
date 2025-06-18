@@ -235,7 +235,7 @@ def main() -> int:
                                cmap="YlGn", cbarlabel="Correlation coefficient")
     texts = heatmap.annotate_heatmap(im)
 
-    ax.set_title("Heatmap of correlation matrix of features and targets")
+    ax.set_title("Heatmap of correlation matrix of features")
 
     fig.tight_layout()
 
