@@ -26,16 +26,20 @@
 \usepackage[hidelinks=true, bookmarks=true]{hyperref}
 
 \def\documenttitle{Description of Bot Tau}
+\def\name{Frans Englich}
 
 \title{\documenttitle}
 \date{\today}
-\author{Frans Englich \\
+\author{\name \\
         \href{mailto:fenglich@fastmail.fm}{fenglich@fastmail.fm}}
 
-%\hypersetup{
-    %pdfsubject = {\documenttitle},
-    %pdftitle = {\documenttitle}
-%}
+\hypersetup{
+    pdfsubject = {\documenttitle},
+    pdftitle = {\documenttitle}
+    pdfauthor = {\name},                                                     
+    pdfcreator = {\name},                                                    
+    pdfproducer = {\name, using \LaTeX},
+}
 
 \newcommand{\figureTau}[1]{
     \begin{figure}[H]
