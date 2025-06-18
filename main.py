@@ -63,7 +63,7 @@ def fetchNewTicks() -> None:
 # TODO:
 # - Fix fetchNewTicks()
 
-def downloadToFile():
+def downloadToFile() -> None:
     df = yf.download("AAPL", interval='1d').loc["2015":]
     df.to_csv("Tickers/AAPL.manual.csv")
 
