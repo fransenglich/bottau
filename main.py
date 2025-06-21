@@ -54,7 +54,7 @@ def main() -> int:
                               "4. close":   "Close",
                               "5. volume":  "Volume"})
 
-    df["date"] = pd.to_datetime(df["date"]) #, format='%Y-%b-%d')
+    df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
 
     df
 
@@ -215,6 +215,16 @@ def main() -> int:
     plt.grid()
     savefig(plt, "cumulative_returns_except_trans_costs")
 
+    # ---------- Drop NaNs ---------
+    len_before = len(df)
+    df = df.dropna()
+    print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
+
+    # ---------- Split ---------
+    split_point = int(0.80 * len(df))
+
+    y_train = df[["returns"]].iloc[:split_point]
+    X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
     # ---- Write constants ----
     drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
