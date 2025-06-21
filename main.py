@@ -224,12 +224,25 @@ def main() -> int:
     split_point = int(0.80 * len(df))
 
     y_train = df[["returns"]].iloc[:split_point]
-    X_train = df[["feature1", "feature2"]].iloc[:split_point]
+    #X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
-    # ---- Write constants ----
+
+    # ---- Drawdown ----
     drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
     print(f"Max drawdown: {drawdown_max}")
 
+
+    # ---- Calmar Ratio ----
+    def calmar_ratio(returns: pd.Series, maxdrawdown: float) -> float:
+        """Returns the Calmar Ratio. Does not take into account the risk-free return."""
+        cagr: float = (returns * 100).sum() / len(returns)
+        return cagr / maxdrawdown
+
+    cr = calmar_ratio(df["returns"], drawdown_max)
+    cr = round(cr, 4)
+
+
+    # ---- Write constants ----
     with open("generated/constants.tex", "w") as f:
         f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
         f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
@@ -242,6 +255,8 @@ def main() -> int:
         f.write(f"\n\def\constantRMean{{{rmean}}}")
         f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\def\constantStd{{{std}}}")
+
+        f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
     df.to_csv("generated/df.csv")
 
