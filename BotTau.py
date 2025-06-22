@@ -11,7 +11,7 @@ import numpy as np
 # Constants
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
-DEFAULT_FIGSIZE = (6, 4)
+DEFAULT_FIGSIZE = (7, 4)
 TRANSACTION_COMMISSION = 0.02
 ROLLING_WINDOW_SIZE = 30
 
