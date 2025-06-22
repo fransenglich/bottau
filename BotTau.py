@@ -30,6 +30,13 @@ def CAGR(first: float, last: float, periods: int) -> float:
     return (last/first)**(1/periods)-1
 
 
+def sharpe_function(portfolio: pd.DataFrame, timeframe: int = 252) -> float:
+    mean = portfolio.mean() * timeframe
+    std = portfolio.std() * np.sqrt(timeframe)
+
+    return mean/std
+
+
 def main() -> int:
 
     def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
@@ -256,7 +263,7 @@ def main() -> int:
 
         rmean = round(df['returns'].mean() * 100, 4)
         std = round(df['returns'].std(), 4)
-        sr = round(rmean/std, 4)
+        sr = round(sharpe_function(df['returns']), 4)
         f.write(f"\n\def\constantRMean{{{rmean}}}")
         f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\def\constantStd{{{std}}}")
