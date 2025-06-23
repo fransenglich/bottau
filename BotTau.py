@@ -208,11 +208,108 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe=252, CR=
         plt.show()
 
 
+def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
+    plt.savefig(f"generated/{basename}.png")
+
+
+def backtest(df: pd.DataFrame) -> None:
+    # ---- Drawdown ----
+    # 1 + & cumprod() because 'returns' are not log returns.
+    df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
+    df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
+    df['drawdown'] = ((df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']) * 100
+
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot(df['drawdown'], label="Drawdown")
+    plt.title("Drawdown")
+    plt.ylabel("Drawdown %")
+    plt.legend()
+    savefig(plt, "drawdown")
+
+
+    # ---- Drawdown Histogram----
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.hist(df['drawdown'], bins='auto')
+    plt.title("Drawdown Distribution")
+    savefig(plt, "drawdown_dist")
+
+
+    # ---- Returns ----
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot(df['returns'], label='Returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Returns")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    savefig(plt, "returns")
+
+
+    # ---- Returns Histogram----
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.hist(df['returns'], bins='auto')
+    plt.title("Returns Distribution")
+    savefig(plt, "returns_dist")
+
+
+    # ---- Cumulative Returns ----
+    df['cumulative_returns'] = df['returns'].cumsum()
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot(df['cumulative_returns'], label='Returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Cumulative Returns")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    savefig(plt, "cumulative_returns")
+
+    # ---- Cumulative Returns Minus Transaction Costs ----
+    def transaction_cost(trade: float) -> float:
+        return trade - (TRANSACTION_COMMISSION + trade/2)
+
+    df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
+
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot(df['cum_with_trans'], label='Netted returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Cumulative Returns Minus Transaction Costs")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    savefig(plt, "cumulative_returns_except_trans_costs")
+
+    # ---- Drawdown ----
+    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
+    print(f"Max drawdown: {drawdown_max}")
+
+
+    # ---- Calmar Ratio ----
+    def calmar_ratio(returns: pd.Series, maxdrawdown: float) -> float:
+        """Returns the Calmar Ratio. Does not take into account the risk-free return."""
+        cagr: float = (returns * 100).sum() / len(returns)
+        return cagr / maxdrawdown
+
+    cr = calmar_ratio(df["returns"], drawdown_max)
+    cr = round(cr, 4)
+
+
+    # ---- Write constants ----
+    with open("generated/constants.tex", "w") as f:
+        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
+        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
+        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
+        f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
+
+        rmean = round(df['returns'].mean() * 100, 4)
+        std = round(df['returns'].std(), 4)
+        sr = round(sharpe_function(df['returns']), 4)
+        f.write(f"\n\def\constantRMean{{{rmean}}}")
+        f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
+        f.write(f"\n\def\constantStd{{{std}}}")
+
+        f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
+
 def main() -> int:
-
-    def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
-        plt.savefig(f"generated/{basename}.png")
-
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
             df_tickers.append(download.initialDownload())
@@ -300,57 +397,6 @@ def main() -> int:
     savefig(plt, "feature_RSI")
 
 
-    # ---- Drawdown ----
-    # 1 + & cumprod() because 'returns' are not log returns.
-    df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
-    df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
-    df['drawdown'] = ((df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']) * 100
-
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['drawdown'], label="Drawdown")
-    plt.title("Drawdown")
-    plt.ylabel("Drawdown %")
-    plt.legend()
-    savefig(plt, "drawdown")
-
-
-    # ---- Drawdown Histogram----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.hist(df['drawdown'], bins='auto')
-    plt.title("Drawdown Distribution")
-    savefig(plt, "drawdown_dist")
-
-
-    # ---- Returns ----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['returns'], label='Returns')
-    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
-    plt.title("Returns")
-    plt.ylabel("Returns")
-    plt.legend()
-    plt.grid()
-    savefig(plt, "returns")
-
-
-    # ---- Returns Histogram----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.hist(df['returns'], bins='auto')
-    plt.title("Returns Distribution")
-    savefig(plt, "returns_dist")
-
-
-    # ---- Cumulative Returns ----
-    df['cumulative_returns'] = df['returns'].cumsum()
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['cumulative_returns'], label='Returns')
-    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
-    plt.title("Cumulative Returns")
-    plt.ylabel("Returns")
-    plt.legend()
-    plt.grid()
-    savefig(plt, "cumulative_returns")
-
-
     # ---- corr matrix ----
     indicators: pd.DataFrame = []
     indicators.append(df['pct_close_futur'])
@@ -383,21 +429,6 @@ def main() -> int:
     savefig(fig, "corrmatrix")
 
 
-    # ---- Cumulative Returns Minus Transaction Costs ----
-    def transaction_cost(trade: float) -> float:
-        return trade - (TRANSACTION_COMMISSION + trade/2)
-
-    df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
-
-    plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['cum_with_trans'], label='Netted returns')
-    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
-    plt.title("Cumulative Returns Minus Transaction Costs")
-    plt.ylabel("Returns")
-    plt.legend()
-    plt.grid()
-    savefig(plt, "cumulative_returns_except_trans_costs")
-
     # ---------- Drop NaNs ---------
     len_before = len(df)
     df = df.dropna()
@@ -409,37 +440,7 @@ def main() -> int:
     y_train = df[["returns"]].iloc[:split_point]
     #X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
-
-    # ---- Drawdown ----
-    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
-    print(f"Max drawdown: {drawdown_max}")
-
-
-    # ---- Calmar Ratio ----
-    def calmar_ratio(returns: pd.Series, maxdrawdown: float) -> float:
-        """Returns the Calmar Ratio. Does not take into account the risk-free return."""
-        cagr: float = (returns * 100).sum() / len(returns)
-        return cagr / maxdrawdown
-
-    cr = calmar_ratio(df["returns"], drawdown_max)
-    cr = round(cr, 4)
-
-
-    # ---- Write constants ----
-    with open("generated/constants.tex", "w") as f:
-        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
-        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
-        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
-        f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
-
-        rmean = round(df['returns'].mean() * 100, 4)
-        std = round(df['returns'].std(), 4)
-        sr = round(sharpe_function(df['returns']), 4)
-        f.write(f"\n\def\constantRMean{{{rmean}}}")
-        f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
-        f.write(f"\n\def\constantStd{{{std}}}")
-
-        f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
+    backtest(df)
 
     df.to_csv("generated/df.csv")
 
