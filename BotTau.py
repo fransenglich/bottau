@@ -263,6 +263,7 @@ def backtest(df: pd.DataFrame) -> None:
     plt.grid()
     savefig(plt, "cumulative_returns")
 
+
     # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
         return trade - (TRANSACTION_COMMISSION + trade/2)
@@ -277,6 +278,7 @@ def backtest(df: pd.DataFrame) -> None:
     plt.legend()
     plt.grid()
     savefig(plt, "cumulative_returns_except_trans_costs")
+
 
     # ---- Drawdown ----
     drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
