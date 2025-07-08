@@ -11,7 +11,7 @@ import numpy as np
 # Constants
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
-DEFAULT_FIGSIZE = (7, 4)
+DEFAULT_FIGSIZE = (20, 4)
 TRANSACTION_COMMISSION = 0.02
 ROLLING_WINDOW_SIZE = 30
 
@@ -406,10 +406,12 @@ def strategy(df: pd.DataFrame):
 
 def investigate(df: pd.DataFrame):
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['returns'], label='Returns')
+    plt.plot_date(df["date"], df['pct_close_futur'], 'g')
+    plt.xticks(rotation=70)
+    #plt.plot(df['pct_close_futur'], label='pct_close_futur')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
-    plt.title("Returns")
-    plt.ylabel("Returns")
+    plt.title("pct_close_futur")
+    plt.ylabel("pct_close_futur")
     plt.legend()
     plt.grid()
     plt.show()
@@ -449,8 +451,11 @@ def main() -> int:
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
+    # Compute our exit signal
+    df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
+
     #backtest(df)
-    strategy(df)
+    #strategy(df)
     investigate(df)
 
     # ---------- Split ---------
