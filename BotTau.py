@@ -311,35 +311,8 @@ def backtest(df: pd.DataFrame) -> None:
 
         f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
-def main() -> int:
-    if len(sys.argv) == 2:
-        if sys.argv[1] == "i":
-            df_tickers.append(download.initialDownload())
-        elif sys.argv[1] == "c":
-            df_tickers.append(download.fetchNewTicks())
-        else:
-            raise Exception("No or wrong commandline argument passed.")
-    else:
-        df = pd.read_csv("Tickers/IBM.csv")
 
-        # Reverse, get increasing dates. Specific to IBM.csv.
-        df = df[::-1]
-
-        df_tickers.append(df)
-
-    df: pd.DataFrame = df_tickers[0]
-
-    # For some reason the name differs.
-    df = df.rename(columns = {"1. open":    "Open",
-                              "2. high":    "High",
-                              "3. low":     "Low",
-                              "4. close":   "Close",
-                              "5. volume":  "Volume"})
-
-    df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
-
-    df
-
+def strategy(df: pd.DataFrame):
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
     df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window=20)
@@ -429,20 +402,64 @@ def main() -> int:
     fig.tight_layout()
 
     savefig(fig, "corrmatrix")
+    
 
+def investigate(df: pd.DataFrame):
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot(df['returns'], label='Returns')
+    plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+    plt.title("Returns")
+    plt.ylabel("Returns")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+
+def main() -> int:
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "i":
+            df_tickers.append(download.initialDownload())
+        elif sys.argv[1] == "c":
+            df_tickers.append(download.fetchNewTicks())
+        else:
+            raise Exception("No or wrong commandline argument passed.")
+    else:
+        df = pd.read_csv("Tickers/IBM.csv")
+
+        # Reverse, get increasing dates. Specific to IBM.csv.
+        df = df[::-1]
+
+        df_tickers.append(df)
+
+    df: pd.DataFrame = df_tickers[0]
+
+    # For some reason the name differs.
+    df = df.rename(columns = {"1. open":    "Open",
+                              "2. high":    "High",
+                              "3. low":     "Low",
+                              "4. close":   "Close",
+                              "5. volume":  "Volume"})
+
+    df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
+
+    df
 
     # ---------- Drop NaNs ---------
     len_before = len(df)
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
+    #backtest(df)
+    strategy(df)
+    investigate(df)
+
     # ---------- Split ---------
     split_point = int(0.80 * len(df))
 
-    y_train = df[["returns"]].iloc[:split_point]
+    # "returns" is created in strategy()
+    #y_train = df[["returns"]].iloc[:split_point]
     #X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
-    backtest(df)
 
     df.to_csv("generated/df.csv")
 
