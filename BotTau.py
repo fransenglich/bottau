@@ -422,10 +422,12 @@ def simple_MA(df: pd.DataFrame) -> pd.DataFrame:
     df['SMA30'] = df["Close"].rolling(window = 30).mean()
 
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot_date(df['date'], df['Close'], label='Closing Price', color='black')
+    plt.plot_date(df['date'], df['Close'], label='Closing Price', linestyle='dotted', color='black')
     plt.plot_date(df['date'], df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
     plt.plot_date(df['date'], df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
     plt.xticks(rotation=70)
+    plt.legend()
+    plt.grid()
 
     plt.show()
 
@@ -460,6 +462,8 @@ def main() -> int:
     df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
 
     df
+
+    df = df.head(100)
 
     # ---------- Drop NaNs ---------
     len_before = len(df)
