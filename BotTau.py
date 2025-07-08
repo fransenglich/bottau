@@ -417,6 +417,21 @@ def investigate(df: pd.DataFrame):
     plt.show()
 
 
+def simple_MA(df: pd.DataFrame) -> pd.DataFrame:
+    df['SMA5'] = df["Close"].rolling(window = 5).mean()
+    df['SMA30'] = df["Close"].rolling(window = 30).mean()
+
+    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.plot_date(df['date'], df['Close'], label='Closing Price', color='black')
+    plt.plot_date(df['date'], df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
+    plt.plot_date(df['date'], df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
+    plt.xticks(rotation=70)
+
+    plt.show()
+
+    return df
+
+
 def main() -> int:
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
@@ -456,7 +471,9 @@ def main() -> int:
 
     #backtest(df)
     #strategy(df)
-    investigate(df)
+    #investigate(df)
+
+    df = simple_MA(df)
 
     # ---------- Split ---------
     split_point = int(0.80 * len(df))
