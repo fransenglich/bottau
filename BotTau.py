@@ -213,6 +213,10 @@ def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
 
 
 def backtest(df: pd.DataFrame) -> None:
+    """A function by Lucas Inglese modified by me that plots and prints a backtest.
+    
+    The passed DataFrame must have a column named returns, which is the
+    returns of the strategy to be backtested."""
     # ---- Drawdown ----
     # 1 + & cumprod() because 'returns' are not log returns.
     df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
