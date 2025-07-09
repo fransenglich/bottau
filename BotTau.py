@@ -37,7 +37,7 @@ def sharpe_function(portfolio: pd.DataFrame, timeframe: int = 252) -> float:
     return mean/std
 
 
-def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe=252, CR=False):
+def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 252, CR: bool =False):
     """
     -----------------------------------------------------------------------------
     | Output: Backtest static portfolio                                         |
@@ -418,7 +418,7 @@ def strategy_bollinger(df: pd.DataFrame) -> pd.DataFrame:
 
 def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot_date(df["date"], df['pct_close_futur'], 'g')
+    plt.plot(df["date"], df['pct_close_futur'], 'g')
     plt.xticks(rotation=70)
     #plt.plot(df['pct_close_futur'], label='pct_close_futur')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
@@ -435,10 +435,17 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
     df['SMA5'] = df["Close"].rolling(window = 5).mean()
     df['SMA30'] = df["Close"].rolling(window = 30).mean()
 
+    df['signal'] = 0
+    condition: pd.Series = df['SMA5'] > df['SMA30']
+
+    df.loc[condition, "signal"] = 1
+
+    df['returns'] = df['signal'] * df['pct_close_futur']
+
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot_date(df['date'], df['Close'], label='Closing Price', linestyle='dotted', color='black')
-    plt.plot_date(df['date'], df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
-    plt.plot_date(df['date'], df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
+    plt.plot(df['date'], df['Close'], label='Closing Price', linestyle='dotted', color='black')
+    plt.plot(df['date'], df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
+    plt.plot(df['date'], df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
     plt.xticks(rotation=70)
     plt.legend()
     plt.grid()
@@ -486,14 +493,18 @@ def main() -> int:
 
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
-    #backtest(df)
     # df = strategy_bollinger(df)
     #investigate(df)
 
     df = strategy_sma(df)
 
+    weights = [1]
+    #backtest_static_portfolio(weights, df)
+
     # ---------- Split ---------
     split_point = int(0.80 * len(df))
+
+    # TODO in/out of sample
 
     # "returns" is created in strategy()
     #y_train = df[["returns"]].iloc[:split_point]
