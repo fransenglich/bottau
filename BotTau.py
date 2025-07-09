@@ -430,6 +430,8 @@ def investigate(df: pd.DataFrame) -> None:
 
 
 def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
+    """A moving average crossover strategy. """
+
     df['SMA5'] = df["Close"].rolling(window = 5).mean()
     df['SMA30'] = df["Close"].rolling(window = 30).mean()
 
@@ -482,7 +484,6 @@ def main() -> int:
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
-    # Compute our exit signal
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
     #backtest(df)
