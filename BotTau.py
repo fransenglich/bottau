@@ -416,7 +416,7 @@ def strategy_bollinger(df: pd.DataFrame) -> pd.DataFrame:
     return df
     
 
-def investigate(df: pd.DataFrame):
+def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot_date(df["date"], df['pct_close_futur'], 'g')
     plt.xticks(rotation=70)
