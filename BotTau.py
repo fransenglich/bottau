@@ -313,6 +313,12 @@ def backtest(df: pd.DataFrame) -> None:
 
 
 def strategy_bollinger(df: pd.DataFrame) -> pd.DataFrame:
+    """A somewhat random function that does:
+    * Bollinger bands
+    * RSI
+    * Parkinson's volatility
+    * Heatmap of correlation matrix of features
+    """
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
     df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window=20)
