@@ -312,7 +312,7 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
 
-def strategy(df: pd.DataFrame):
+def strategy_bollinger(df: pd.DataFrame) -> pd.DataFrame:
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
     df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window=20)
@@ -402,6 +402,8 @@ def strategy(df: pd.DataFrame):
     fig.tight_layout()
 
     savefig(fig, "corrmatrix")
+
+    return df
     
 
 def investigate(df: pd.DataFrame):
@@ -417,7 +419,7 @@ def investigate(df: pd.DataFrame):
     plt.show()
 
 
-def simple_MA(df: pd.DataFrame) -> pd.DataFrame:
+def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
     df['SMA5'] = df["Close"].rolling(window = 5).mean()
     df['SMA30'] = df["Close"].rolling(window = 30).mean()
 
@@ -474,10 +476,10 @@ def main() -> int:
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
     #backtest(df)
-    #strategy(df)
+    # df = strategy_bollinger(df)
     #investigate(df)
 
-    df = simple_MA(df)
+    df = strategy_sma(df)
 
     # ---------- Split ---------
     split_point = int(0.80 * len(df))
