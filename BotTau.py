@@ -53,18 +53,19 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     import numpy as np
     from scipy.optimize import minimize
     import matplotlib.pyplot as plt
-    plt.style.use('seaborn')
+    #plt.style.use('seaborn')
 
 
     # Compute the portfolio
-    portfolio = np.multiply(database,np.transpose(weights))
+    portfolio = np.multiply(database, np.transpose(weights))
     portfolio = portfolio.sum(axis=1)
     columns = database.columns
     columns = [col for col in columns]
 
     ######################### COMPUTE THE BETA ##################################
     # Import the benchmark
-    benchmark = yf.download(ben)["Adj Close"].pct_change(1).dropna()
+    # Lucas: benchmark = yf.download(ben)["Adj Close"].pct_change(1).dropna()
+    benchmark = pd.read_csv("Tickers/GSPC.csv")["Close"].pct_change(1).dropna()
 
     # Concat the asset and the benchmark
     join = pd.concat((portfolio, benchmark), axis=1).dropna()
@@ -142,7 +143,8 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
         crs = []
         for i in range(l):
             # Importation of benchmark
-            benchmark = yf.download(ben)["Adj Close"].pct_change(1).dropna()
+            # Lucas: benchmark = yf.download(ben)["Adj Close"].pct_change(1).dropna()
+            benchmark = pd.read_csv("Tickers/GSPC.csv")["Close"].pct_change(1).dropna()
 
             # Concat the asset and the benchmark
             join_bis = pd.concat((database.iloc[:,i], benchmark), axis=1).dropna()
@@ -498,8 +500,11 @@ def main() -> int:
 
     df = strategy_sma(df)
 
-    weights = [1]
-    #backtest_static_portfolio(weights, df)
+    # backtest_static_portfolio() expects this, skip the other columns.
+    df = pd.DataFrame(df["returns"])
+
+    weights = (1)
+    backtest_static_portfolio(weights, df)
 
     # ---------- Split ---------
     split_point = int(0.80 * len(df))
