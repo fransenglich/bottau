@@ -500,7 +500,9 @@ def main() -> int:
 
     df = strategy_sma(df)
 
-    # backtest_static_portfolio() expects this, skip the other columns.
+    df.to_csv("generated/df.csv")
+
+    # Skip the other columns, backtest_static_portfolio() expects this.
     df = pd.DataFrame(df["returns"])
 
     weights = (1)
@@ -514,9 +516,6 @@ def main() -> int:
     # "returns" is created in strategy()
     #y_train = df[["returns"]].iloc[:split_point]
     #X_train = df[["feature1", "feature2"]].iloc[:split_point]
-
-
-    df.to_csv("generated/df.csv")
 
     return 0
 
