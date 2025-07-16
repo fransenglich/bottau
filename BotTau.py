@@ -8,6 +8,9 @@ import quantreo.features_engineering as fe
 import pandas as pd
 import numpy as np
 
+import BrokerABC
+import Broker
+
 # Constants
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
@@ -516,6 +519,8 @@ def main() -> int:
     # "returns" is created in strategy()
     #y_train = df[["returns"]].iloc[:split_point]
     #X_train = df[["feature1", "feature2"]].iloc[:split_point]
+
+    broker: BrokerABC.BrokerABC = Broker.init()
 
     return 0
 

@@ -5,10 +5,13 @@ import MetaTrader5 as mt5
 warnings.filterwarnings("ignore")
 mt5.initialize()
 
+import BrokerABC
 
-class MT5:
+class MT5(BrokerABC.BrokerABC):
 
-   def get_data(symbol, n, timeframe=mt5.TIMEFRAME_D1):
+   def get_data(symbol, n):
+        timeframe=mt5.TIMEFRAME_D1
+
         """ Function to import the data of the chosen symbol"""
 
         # Initialize the connection if there is not
