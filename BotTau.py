@@ -515,6 +515,8 @@ def main() -> int:
     split_point = int(0.80 * len(df))
 
     # TODO in/out of sample
+    #in_sample = # before
+    #out_sample = # after
 
     # "returns" is created in strategy()
     #y_train = df[["returns"]].iloc[:split_point]
