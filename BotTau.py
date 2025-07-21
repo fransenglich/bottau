@@ -290,7 +290,7 @@ def backtest(df: pd.DataFrame) -> None:
 
 
     # ---- Drawdown ----
-    drawdown_max = round(abs(df['drawdown'].min()), 2) # Percent
+    drawdown_max = np.round(abs(df['drawdown'].min()), 2) # Percent
     print(f"Max drawdown: {drawdown_max}")
 
 
@@ -301,7 +301,7 @@ def backtest(df: pd.DataFrame) -> None:
         return cagr / maxdrawdown
 
     cr = calmar_ratio(df["returns"], drawdown_max)
-    cr = round(cr, 4)
+    cr = np.round(cr, 4)
 
 
     # ---- Write constants ----
@@ -311,9 +311,9 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
         f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
 
-        rmean = round(df['returns'].mean() * 100, 4)
-        std = round(df['returns'].std(), 4)
-        sr = round(sharpe_function(df['returns']), 4)
+        rmean = np.round(df['returns'].mean() * 100, 4)
+        std = np.round(df['returns'].std(), 4)
+        sr = np.round(sharpe_function(df['returns']), 4)
         f.write(f"\n\def\constantRMean{{{rmean}}}")
         f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\def\constantStd{{{std}}}")
