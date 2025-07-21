@@ -115,7 +115,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
 
     # Compute the drawdown
     drawdown = ((cum_rets)/running_max - 1)
-    min_drawdon = -drawdown.min()
+    min_drawdown = -drawdown.min()
 
 
     ######################### COMPUTE THE VaR ##################################
@@ -173,7 +173,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     Sharpe: {np.round(Sharpe, 3)} \t Sortino: {np.round(Sortino, 3)}
     -----------------------------------------------------------------------------
     VaR: {np.round(VaR*100, 2)} %\t cVaR: {np.round(cVaR*100, 2)} % \t \
-    VaR/cVaR: {np.round(cVaR/VaR, 3)} \t drawdown: {np.round(min_drawdon*100, 2)} %
+    VaR/cVaR: {np.round(cVaR/VaR, 3)} \t drawdown: {np.round(min_drawdown*100, 2)} %
     -----------------------------------------------------------------------------
     """)
 
