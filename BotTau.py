@@ -527,5 +527,22 @@ def main() -> int:
     return 0
 
 
+    # https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation
+    # ChatGPT: "I'm stuck in my financial quant project. What shall I do?":
+#        from sklearn.model_selection import train_test_split
+#        from sklearn.ensemble import RandomForestClassifier
+#        from sklearn.metrics import classification_report
+
+#        X = df[['MACD', 'RSI']]  # or other features
+#        y = df['Direction']
+#
+#        X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=False, test_size=0.2)
+#
+#        model = RandomForestClassifier()
+#        model.fit(X_train, y_train)
+#
+#        preds = model.predict(X_test)
+#        print(classification_report(y_test, preds))
+
 if __name__ == "__main__":
     main()
