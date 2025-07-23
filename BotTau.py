@@ -544,5 +544,9 @@ def main() -> int:
 #        preds = model.predict(X_test)
 #        print(classification_report(y_test, preds))
 
+# Final function for the strategy takes at least the `symbol' as argument, and
+# returns a tuple with 2 Bools, for buy and sell. The function is pre-trained,
+# loads the model with joblib.load() or so, does a prediction and returns.
+
 if __name__ == "__main__":
     main()

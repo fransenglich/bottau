@@ -2,6 +2,7 @@
 
 import pandas as pd
 import yfinance as yf
+from abc import ABC, abstractmethod
 
 #df = pd.read_csv("df.csv")
 #df = pd.read_csv("Tickers/IBM.csv")
@@ -30,3 +31,12 @@ database = database["Close"]
 
 # Drop missing values
 data = database.dropna().pct_change(1).dropna()
+
+class Strategy:
+    """Do long and sell of long position."""
+
+    @abstractmethod
+    def get_position(symbol, timeframe):
+        """Returns tuple with two Bools. First is Buy, second is Sell."""
+        #df = get_rates(symbol)
+        pass
