@@ -28,7 +28,7 @@ SL = 0.09
 # format.
 df_tickers = []
 
-#  Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
+# Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
 def CAGR(first: float, last: float, periods: int) -> float:
     return (last/first)**(1/periods)-1
 
@@ -287,6 +287,8 @@ def backtest(df: pd.DataFrame) -> None:
     plt.legend()
     plt.grid()
     savefig(plt, "cumulative_returns_except_trans_costs")
+    # TODO simulate slippage
+    # TODO fx risk
 
 
     # ---- Drawdown ----
@@ -321,7 +323,7 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
 
-def strategy_bollinger(df: pd.DataFrame) -> pd.DataFrame:
+def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
     """A somewhat random function that does:
     * Bollinger bands
     * RSI
@@ -435,7 +437,7 @@ def investigate(df: pd.DataFrame) -> None:
 
 
 def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
-    """A moving average crossover strategy. """
+    """A moving average crossover strategy."""
 
     df['SMA5'] = df["Close"].rolling(window = 5).mean()
     df['SMA30'] = df["Close"].rolling(window = 30).mean()
@@ -498,21 +500,22 @@ def main() -> int:
 
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
-    # df = strategy_bollinger(df)
+    #df = strategy_sma(df)
+    df = strategy_Bollinger_RSI(df)
     #investigate(df)
 
-    df = strategy_sma(df)
-
     df.to_csv("generated/df.csv")
+
+    backtest(df)
 
     # Skip the other columns, backtest_static_portfolio() expects this.
     df = pd.DataFrame(df["returns"])
 
-    weights = (1)
-    backtest_static_portfolio(weights, df)
+    #weights = (1)
+    #backtest_static_portfolio(weights, df)
 
     # ---------- Split ---------
-    split_point = int(0.80 * len(df))
+    #split_point = int(0.80 * len(df))
 
     # TODO in/out of sample
     #in_sample = # before
@@ -522,7 +525,7 @@ def main() -> int:
     #y_train = df[["returns"]].iloc[:split_point]
     #X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
-    broker: BrokerABC.BrokerABC = Broker.init()
+    #broker: BrokerABC.BrokerABC = Broker.init()
 
     return 0
 
