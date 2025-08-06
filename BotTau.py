@@ -5,8 +5,11 @@ import sys
 import download
 import ta
 import quantreo.features_engineering as fe
+import quantreo.target_engineering as te
 import pandas as pd
+import statsmodels.api as sm
 import numpy as np
+from sklearn.linear_model import LinearRegression
 
 import BrokerABC
 import Broker
@@ -420,8 +423,32 @@ def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
 
     savefig(fig, "corrmatrix")
 
+    # -------------- Target ---------------
+    df['target_future_returns_sign'] = te.directional.future_returns_sign(df, close_col = "Close")
+
+    # -------------- Regression ---------------
+    # scikit-learn
+    sklearn_reg = LinearRegression()
+    sklearn_reg.fit(pd.DataFrame(df['target_future_returns_sign']), pd.DataFrame(df['signal']))
+    # Model is now trained.
+    print(f"coef: {sklearn_reg.coef_}")
+    print(f"intercept: {sklearn_reg.intercept_}")
+    #reg.predict()
+
+    # statsmodels
+    X = pd.DataFrame(df['signal'])
+    y = df['target_future_returns_sign']
+
+    X2 = sm.add_constant(X)
+    est = sm.OLS(y, X2)
+    est2 = est.fit()
+    print(est2.summary())
+
+    with open("generated/ols_conditions.txt", "w") as f:
+        f.write(str(est2.summary()))
+
     return df
-    
+
 
 def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
@@ -546,6 +573,8 @@ def main() -> int:
 #
 #        preds = model.predict(X_test)
 #        print(classification_report(y_test, preds))
+
+
 
 # Final function for the strategy takes at least the `symbol' as argument, and
 # returns a tuple with 2 Bools, for buy and sell. The function is pre-trained,
