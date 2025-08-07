@@ -312,8 +312,8 @@ def backtest(df: pd.DataFrame) -> None:
     # ---- Write constants ----
     with open("generated/constants.tex", "w") as f:
         f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
-        f.write(f"\n\def\constantStartdate{{{df['date'].min()}}}")
-        f.write(f"\n\def\constantEnddate{{{df['date'].max()}}}")
+        f.write(f"\n\def\constantStartdate{{{df.index.min()}}}")
+        f.write(f"\n\def\constantEnddate{{{df.index.max()}}}")
         f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
 
         rmean = np.round(df['returns'].mean() * 100, 4)
@@ -326,7 +326,7 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
 
-def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
+def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataFrame:
     """A somewhat random function that does:
     * Bollinger bands
     * RSI
@@ -334,9 +334,9 @@ def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
     * Heatmap of correlation matrix of features
     """
     # Bollinger Bands
-    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window=20)
-    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window=20)
-    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window=20)
+    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window = param_window)
+    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window = param_window)
+    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window = param_window)
 
     # RSI
     df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
@@ -454,7 +454,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
 
 def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df["date"], df['pct_close_futur'], 'g')
+    plt.plot(df['pct_close_futur'], 'g')
     plt.xticks(rotation=70)
     #plt.plot(df['pct_close_futur'], label='pct_close_futur')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
@@ -479,9 +479,9 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
     df['returns'] = df['signal'] * df['pct_close_futur']
 
     plt.figure(figsize=DEFAULT_FIGSIZE)
-    plt.plot(df['date'], df['Close'], label='Closing Price', linestyle='dotted', color='black')
-    plt.plot(df['date'], df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
-    plt.plot(df['date'], df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
+    plt.plot(df['Close'], label='Closing Price', linestyle='dotted', color='black')
+    plt.plot(df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
+    plt.plot(df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
     plt.xticks(rotation=70)
     plt.legend()
     plt.grid()
@@ -500,7 +500,7 @@ def main() -> int:
         else:
             raise Exception("No or wrong commandline argument passed.")
     else:
-        df = pd.read_csv("Tickers/IBM.csv")
+        df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
 
         # Reverse, get increasing dates. Specific to IBM.csv.
         df = df[::-1]
@@ -516,7 +516,7 @@ def main() -> int:
                               "4. close":   "Close",
                               "5. volume":  "Volume"})
 
-    df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
+    #df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
 
     df
 
