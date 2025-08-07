@@ -17,7 +17,7 @@ import Broker
 # Constants
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
-DEFAULT_FIGSIZE = (20, 4)
+DEFAULT_FIGSIZE = (8, 4)
 TRANSACTION_COMMISSION = 0.02
 ROLLING_WINDOW_SIZE = 30
 
@@ -436,6 +436,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
     #reg.predict()
 
     # statsmodels
+    # We copy the DataFrame because add_constant() adds a column.
     X = pd.DataFrame(df['signal'])
     y = df['target_future_returns_sign']
 
@@ -445,6 +446,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame) -> pd.DataFrame:
     print(est2.summary())
 
     with open("generated/ols_conditions.txt", "w") as f:
+        # Possibly write est2.pvalues['signal']
         f.write(str(est2.summary()))
 
     return df
@@ -536,7 +538,7 @@ def main() -> int:
     backtest(df)
 
     # Skip the other columns, backtest_static_portfolio() expects this.
-    df = pd.DataFrame(df["returns"])
+    #df = pd.DataFrame(df["returns"])
 
     #weights = (1)
     #backtest_static_portfolio(weights, df)
