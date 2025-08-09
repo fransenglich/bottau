@@ -10,6 +10,7 @@ import pandas as pd
 import statsmodels.api as sm
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from scipy.optimize import minimize
 
 import BrokerABC
 import Broker
@@ -34,13 +35,6 @@ df_tickers = []
 # Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
 def CAGR(first: float, last: float, periods: int) -> float:
     return (last/first)**(1/periods)-1
-
-
-def sharpe_function(portfolio: pd.DataFrame, timeframe: int = 252) -> float:
-    mean = portfolio.mean() * timeframe
-    std = portfolio.std() * np.sqrt(timeframe)
-
-    return mean/std
 
 
 def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 252, CR: bool =False):
@@ -318,7 +312,7 @@ def backtest(df: pd.DataFrame) -> None:
 
         rmean = np.round(df['returns'].mean() * 100, 4)
         std = np.round(df['returns'].std(), 4)
-        sr = np.round(sharpe_function(df['returns']), 4)
+        sr = np.round(sharpe_ratio(df['returns']), 4)
         f.write(f"\n\def\constantRMean{{{rmean}}}")
         f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\def\constantStd{{{std}}}")
@@ -334,9 +328,9 @@ def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataF
     * Heatmap of correlation matrix of features
     """
     # Bollinger Bands
-    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window = param_window)
-    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window = param_window)
-    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window = param_window)
+    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window = int(param_window))
+    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window = int(param_window))
+    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window = int(param_window))
 
     # RSI
     df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
@@ -362,8 +356,11 @@ def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataF
     # This is our computed trading signal applied to the returns
     df["returns"] = df["signal"]*df["pct_close_futur"]
 
-    print(df)
+    #print(df)
+    return df
 
+
+def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
@@ -452,6 +449,33 @@ def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataF
     return df
 
 
+def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252) -> float:
+    """Computes the Sharpe Ratio for the returns in the passed Series."""
+    mean = portfolio.mean() * timeframe
+    std = portfolio.std() * np.sqrt(timeframe)
+
+    return mean/std
+
+
+def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
+
+    def backtest(x) -> float:
+        # We evaluate based on the Sharpe Ratio
+        df_ret = strategy_Bollinger_RSI(df, x)
+
+        # We want to maximize, so * -1
+        return -1.0 * sharpe_ratio(df_ret['Close'])
+
+
+    x0 = [30] # window size
+    bounds = ((2, 100))
+
+    res = minimize(backtest, x0, options = {'disp': True})
+    # , bounds = bounds
+    print(res.message)
+    print(res.x)
+
+
 def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['pct_close_futur'], 'g')
@@ -530,8 +554,9 @@ def main() -> int:
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
     #df = strategy_sma(df)
-    df = strategy_Bollinger_RSI(df)
+    #df = strategy_Bollinger_RSI(df)
     #investigate(df)
+    test_opt_Bollinger_RSI(df)
 
     df.to_csv("generated/df.csv")
 
