@@ -468,12 +468,21 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
 
 
     x0 = [30] # window size
-    bounds = ((2, 100))
+    bounds = [(2, 100)]
 
-    res = minimize(backtest, x0, options = {'disp': True})
-    # , bounds = bounds
+    res = minimize(backtest, x0, bounds = bounds, options = {'disp': True})
+
+    plot_vals = []
+
+    for i in range(bounds[0][0], bounds[0][1]):
+        v = backtest(i)
+        plot_vals.append(v)
+        
     print(res.message)
     print(res.x)
+
+    plt.plot(plot_vals)
+    plt.show()
 
 
 def investigate(df: pd.DataFrame) -> None:
