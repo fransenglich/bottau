@@ -467,8 +467,8 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
         return -1.0 * sharpe_ratio(df_ret['Close'])
 
 
-    x0 = [30] # window size
-    bounds = [(2, 100)]
+    x0 = (30) # window size
+    bounds = ((2, 100),)
 
     res = minimize(backtest, x0, bounds = bounds, options = {'disp': True})
 
