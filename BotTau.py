@@ -1,19 +1,20 @@
-import matplotlib.pyplot as plt
-import matplotlib
-import heatmap
 import sys
-import download
-import ta
+
+from scipy.optimize import minimize
+from sklearn.linear_model import LinearRegression
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import quantreo.features_engineering as fe
 import quantreo.target_engineering as te
-import pandas as pd
 import statsmodels.api as sm
-import numpy as np
-from sklearn.linear_model import LinearRegression
-from scipy.optimize import minimize
+import ta
 
-import BrokerABC
 import Broker
+import BrokerABC
+import download
+import heatmap
 
 # Constants
 # ----------------------------------------------
