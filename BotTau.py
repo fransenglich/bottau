@@ -406,9 +406,9 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     cm_labels = [i.name for i in indicators]
 
     fig, ax = plt.subplots()
-    im, cbar = heatmap.heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
-                               cmap="YlGn", cbarlabel="Correlation coefficient")
-    _ = heatmap.annotate_heatmap(im)
+    im, _ = heatmap.heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
+                            cmap="YlGn", cbarlabel="Correlation coefficient")
+    heatmap.annotate_heatmap(im)
 
     ax.set_title("Heatmap of correlation matrix of features")
 
