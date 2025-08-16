@@ -9,6 +9,7 @@ import pandas as pd
 import quantreo.features_engineering as fe
 import quantreo.target_engineering as te
 import statsmodels.api as sm
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 import ta
 
 import download
@@ -384,17 +385,20 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     savefig(plt, "feature_RSI")
 
     # ---- corr matrix ----
-    features: pd.DataFrame = []
-    features.append(df['pct_close_futur'])
+
+    # This is our design matrix.
+    features: pd.DataFrame = pd.DataFrame()
+
+    features['pct_close_futur'] = df['pct_close_futur']
     df['var'] = df['pct_close_futur'].rolling(window=ROLLING_WINDOW_SIZE).var()
     df['parkinsons_var'] = fe.volatility.parkinson_volatility(df,
                                                               window_size=ROLLING_WINDOW_SIZE,
                                                               high_col="High",
                                                               low_col="Low")
-    features.append(df['var'])
-    features.append(df['parkinsons_var'])
+    features['var'] = df['var']
+    features['parkinsons_var'] = df['parkinsons_var']
 
-    flen = len(features)
+    flen = len(features.columns)
     in_range = range(flen)
     pearsonmatrix = np.zeros((flen, flen), dtype=float)
     spearmanmatrix = np.zeros((flen, flen), dtype=float)
@@ -402,10 +406,10 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     for i in in_range:
         # This works: for l in range(ilen - (ilen - i) + 1):
         for length in in_range:
-            pearsonmatrix[i, length] = features[i].corr(features[length])
-            spearmanmatrix[i, length] = features[i].corr(features[length], method='spearman')
+            pearsonmatrix[i, length] = features.iloc[:, i].corr(features.iloc[:, length]) # TODO why to column length?
+            spearmanmatrix[i, length] = features.iloc[:, i].corr(features.iloc[:, length], method='spearman')
     
-    cm_labels = [i.name for i in features]
+    cm_labels = features.columns # [i.name for i in features.columns]
 
     # - Pearson
     fig, ax = plt.subplots()
@@ -428,6 +432,17 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     savefig(fig, "spearmanmatrix")
 
 
+    # - Multicollinearity
+    # See https://www.geeksforgeeks.org/python/detecting-multicollinearity-with-vif-python/
+
+    # variance_inflation_factor() needs this.
+    features.dropna(inplace=True)
+
+    vifs = [(features.iloc[:, i].name, variance_inflation_factor(features, i)) for i in range(len(features.columns))]
+
+    with open("generated/VIFs.tex", "w") as f:
+        for name, vif in vifs:
+            f.write(name.replace("_", "\\_") + " & " + str(round(vif, 2)) + " \\\\\n")
 
     # -------------- Target ---------------
     df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
@@ -535,6 +550,9 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> int:
+
+    plt.ioff()
+
     if len(sys.argv) == 2:
         if sys.argv[1] == "i":
             df_tickers.append(download.initialDownload())
