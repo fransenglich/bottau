@@ -396,25 +396,38 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
 
     ilen = len(indicators)
     in_range = range(ilen)
-    corrmatrix = np.zeros((ilen, ilen), dtype=float)
+    pearsonmatrix = np.zeros((ilen, ilen), dtype=float)
+    spearmanmatrix = np.zeros((ilen, ilen), dtype=float)
 
     for i in in_range:
         # This works: for l in range(ilen - (ilen - i) + 1):
         for length in in_range:
-            corrmatrix[i, length] = indicators[i].corr(indicators[length])
+            pearsonmatrix[i, length] = indicators[i].corr(indicators[length])
+            spearmanmatrix[i, length] = indicators[i].corr(indicators[length], method='spearman')
     
     cm_labels = [i.name for i in indicators]
 
+    # - Pearson
     fig, ax = plt.subplots()
-    im, _ = heatmap.heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
-                            cmap="YlGn", cbarlabel="Correlation coefficient")
-    heatmap.annotate_heatmap(im)
+    pm, _ = heatmap.heatmap(pearsonmatrix, cm_labels, cm_labels, ax=ax,
+                            cmap="YlGn", cbarlabel="Pearson correlation coefficient")
+    heatmap.annotate_heatmap(pm)
 
-    ax.set_title("Heatmap of correlation matrix of features")
-
+    ax.set_title("Heatmap of Pearson correlation matrix of features")
     fig.tight_layout()
+    savefig(fig, "pearsonmatrix")
 
-    savefig(fig, "corrmatrix")
+    # - Spearman
+    fig, ax = plt.subplots()
+    pm, _ = heatmap.heatmap(spearmanmatrix, cm_labels, cm_labels, ax=ax,
+                            cmap="YlGn", cbarlabel="Spearman correlation coefficient")
+    heatmap.annotate_heatmap(pm)
+
+    ax.set_title("Heatmap of Spearman correlation matrix of features")
+    fig.tight_layout()
+    savefig(fig, "spearmanmatrix")
+
+
 
     # -------------- Target ---------------
     df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
@@ -565,6 +578,7 @@ def main() -> int:
     test_opt_Bollinger_RSI(df)
 
     df.to_csv("generated/df.csv")
+    plot_and_write(df)
 
     backtest(df)
 
