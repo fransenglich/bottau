@@ -384,28 +384,28 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     savefig(plt, "feature_RSI")
 
     # ---- corr matrix ----
-    indicators: pd.DataFrame = []
-    indicators.append(df['pct_close_futur'])
+    features: pd.DataFrame = []
+    features.append(df['pct_close_futur'])
     df['var'] = df['pct_close_futur'].rolling(window=ROLLING_WINDOW_SIZE).var()
     df['parkinsons_var'] = fe.volatility.parkinson_volatility(df,
                                                               window_size=ROLLING_WINDOW_SIZE,
                                                               high_col="High",
                                                               low_col="Low")
-    indicators.append(df['var'])
-    indicators.append(df['parkinsons_var'])
+    features.append(df['var'])
+    features.append(df['parkinsons_var'])
 
-    ilen = len(indicators)
-    in_range = range(ilen)
-    pearsonmatrix = np.zeros((ilen, ilen), dtype=float)
-    spearmanmatrix = np.zeros((ilen, ilen), dtype=float)
+    flen = len(features)
+    in_range = range(flen)
+    pearsonmatrix = np.zeros((flen, flen), dtype=float)
+    spearmanmatrix = np.zeros((flen, flen), dtype=float)
 
     for i in in_range:
         # This works: for l in range(ilen - (ilen - i) + 1):
         for length in in_range:
-            pearsonmatrix[i, length] = indicators[i].corr(indicators[length])
-            spearmanmatrix[i, length] = indicators[i].corr(indicators[length], method='spearman')
+            pearsonmatrix[i, length] = features[i].corr(features[length])
+            spearmanmatrix[i, length] = features[i].corr(features[length], method='spearman')
     
-    cm_labels = [i.name for i in indicators]
+    cm_labels = [i.name for i in features]
 
     # - Pearson
     fig, ax = plt.subplots()
