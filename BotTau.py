@@ -204,7 +204,6 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
         plt.xticks(size=15, fontweight="bold")
         plt.yticks(size=15, fontweight="bold")
         plt.show()
-        plt.show()
 
 
 def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
@@ -507,7 +506,7 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
     print(res.x)
 
     plt.plot(plot_vals)
-    plt.show()
+    # plt.show()
 
 
 def investigate(df: pd.DataFrame) -> None:
