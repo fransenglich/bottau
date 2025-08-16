@@ -11,8 +11,6 @@ import quantreo.target_engineering as te
 import statsmodels.api as sm
 import ta
 
-import Broker
-import BrokerABC
 import download
 import heatmap
 
@@ -32,6 +30,7 @@ SL = 0.09
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
 df_tickers = []
+
 
 # Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
 def CAGR(first: float, last: float, periods: int) -> float:
@@ -54,8 +53,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     import numpy as np
     from scipy.optimize import minimize
     import matplotlib.pyplot as plt
-    #plt.style.use('seaborn')
-
+    # plt.style.use('seaborn')
 
     # Compute the portfolio
     portfolio = np.multiply(database, np.transpose(weights))
@@ -126,7 +124,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
 
     # Create a vector with n simulations of the normal law
     vec = pd.DataFrame(np.random.normal(mean, std, size=(n,)),
-                      columns = ["Simulations"])
+                       columns=["Simulations"])
 
     # Orderer the values and find the theta% value
     VaR = -vec.sort_values(by="Simulations").iloc[t].values[0]
@@ -137,12 +135,12 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
 
     ######################### COMPUTE THE RC ###################################
     if CR:
-    # Find the number of the asset in the portfolio
-        l = len(weights)
+        # Find the number of the asset in the portfolio
+        length = len(weights)
 
         # Compute the risk contribution of each asset
         crs = []
-        for i in range(l):
+        for i in range(length):
             # Importation of benchmark
             # Lucas: benchmark = yf.download(ben)["Adj Close"].pct_change(1).dropna()
             benchmark = pd.read_csv("Tickers/GSPC.csv")["Close"].pct_change(1).dropna()
@@ -175,38 +173,35 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     -----------------------------------------------------------------------------
     """)
 
-
-    plt.figure(figsize=(15,8))
-    plt.plot(join.iloc[:,0].cumsum()*100, color="#035593", linewidth=3)
-    plt.plot(join.iloc[:,1].cumsum()*100, color="#068C72", linewidth=3)
+    plt.figure(figsize=(15, 8))
+    plt.plot(join.iloc[:, 0].cumsum()*100, color="#035593", linewidth=3)
+    plt.plot(join.iloc[:, 1].cumsum()*100, color="#068C72", linewidth=3)
     plt.title("CUMULTATIVE RETURN", size=15)
     plt.ylabel("Cumulative return %", size=15)
-    plt.xticks(size=15,fontweight="bold")
-    plt.yticks(size=15,fontweight="bold")
+    plt.xticks(size=15, fontweight="bold")
+    plt.yticks(size=15, fontweight="bold")
     plt.legend(["Strategy", "Benchmark"])
     plt.show()
 
-    plt.figure(figsize=(15,8))
+    plt.figure(figsize=(15, 8))
     plt.fill_between(drawdown.index, drawdown*100, 0, color="#CE5151")
-    plt.plot(drawdown.index,drawdown*100, color="#930303", linewidth=1.5)
+    plt.plot(drawdown.index, drawdown*100, color="#930303", linewidth=1.5)
     plt.title("DRAWDOWN", size=15)
     plt.ylabel("Drawdown %", size=15)
-    plt.xticks(size=15,fontweight="bold")
-    plt.yticks(size=15,fontweight="bold")
+    plt.xticks(size=15, fontweight="bold")
+    plt.yticks(size=15, fontweight="bold")
     plt.show()
 
-
-
     if CR:
-        plt.figure(figsize=(15,8))
-        plt.scatter(columns, crs, linewidth=3, color = "#B96553")
+        plt.figure(figsize=(15, 8))
+        plt.scatter(columns, crs, linewidth=3, color="#B96553")
         plt.axhline(0, color="#53A7B9")
         plt.grid(axis="x")
         plt.title("RISK CONTRIBUTION PORTFOLIO", size=15)
         plt.xlabel("Assets")
         plt.ylabel("Risk contribution")
-        plt.xticks(size=15,fontweight="bold")
-        plt.yticks(size=15,fontweight="bold")
+        plt.xticks(size=15, fontweight="bold")
+        plt.yticks(size=15, fontweight="bold")
         plt.show()
         plt.show()
 
@@ -217,7 +212,7 @@ def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
 
 def backtest(df: pd.DataFrame) -> None:
     """A function by Lucas Inglese modified by me that plots and prints a backtest.
-    
+
     The passed DataFrame must have a column named returns, which is the
     returns of the strategy to be backtested."""
     # ---- Drawdown ----
@@ -233,13 +228,11 @@ def backtest(df: pd.DataFrame) -> None:
     plt.legend()
     savefig(plt, "drawdown")
 
-
     # ---- Drawdown Histogram----
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
     savefig(plt, "drawdown_dist")
-
 
     # ---- Returns ----
     plt.figure(figsize=DEFAULT_FIGSIZE)
@@ -251,13 +244,11 @@ def backtest(df: pd.DataFrame) -> None:
     plt.grid()
     savefig(plt, "returns")
 
-
     # ---- Returns Histogram----
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
     savefig(plt, "returns_dist")
-
 
     # ---- Cumulative Returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
@@ -269,7 +260,6 @@ def backtest(df: pd.DataFrame) -> None:
     plt.legend()
     plt.grid()
     savefig(plt, "cumulative_returns")
-
 
     # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
@@ -288,11 +278,9 @@ def backtest(df: pd.DataFrame) -> None:
     # TODO simulate slippage
     # TODO fx risk
 
-
     # ---- Drawdown ----
     drawdown_max = np.round(abs(df['drawdown'].min()), 2) # Percent
     print(f"Max drawdown: {drawdown_max}")
-
 
     # ---- Calmar Ratio ----
     def calmar_ratio(returns: pd.Series, maxdrawdown: float) -> float:
@@ -302,7 +290,6 @@ def backtest(df: pd.DataFrame) -> None:
 
     cr = calmar_ratio(df["returns"], drawdown_max)
     cr = np.round(cr, 4)
-
 
     # ---- Write constants ----
     with open("generated/constants.tex", "w") as f:
@@ -321,7 +308,8 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
 
 
-def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataFrame:
+def strategy_Bollinger_RSI(df: pd.DataFrame,
+                           param_window: int = 20) -> pd.DataFrame:
     """A somewhat random function that does:
     * Bollinger bands
     * RSI
@@ -329,9 +317,12 @@ def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataF
     * Heatmap of correlation matrix of features
     """
     # Bollinger Bands
-    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'], window = int(param_window))
-    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'], window = int(param_window))
-    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'], window = int(param_window))
+    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'],
+                                                   window=int(param_window))
+    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'],
+                                                   window=int(param_window))
+    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'],
+                                                   window=int(param_window))
 
     # RSI
     df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
@@ -357,7 +348,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame, param_window: int = 20) -> pd.DataF
     # This is our computed trading signal applied to the returns
     df["returns"] = df["signal"]*df["pct_close_futur"]
 
-    #print(df)
+    # print(df)
     return df
 
 
@@ -366,11 +357,14 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
     plt.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
-    plt.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted', color='green')
+    plt.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted',
+             color='green')
 
     # Plot Buy/Sell Signals
-    plt.scatter(df.index[df['signal'] == -1], df['Close'][df['signal'] == -1], marker='v', color='red', label='Sell Signal', s=50)
-    plt.scatter(df.index[df['signal'] == 1], df['Close'][df['signal'] == 1], marker='^', color='green', label='Buy Signal', s=50)
+    plt.scatter(df.index[df['signal'] == -1], df['Close'][df['signal'] == -1],
+                marker='v', color='red', label='Sell Signal', s=50)
+    plt.scatter(df.index[df['signal'] == 1], df['Close'][df['signal'] == 1],
+                marker='^', color='green', label='Buy Signal', s=50)
 
     plt.legend()
     plt.title("Bollinger Bands on Closing Prices - AAPL")
@@ -389,31 +383,32 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     plt.grid()
     savefig(plt, "feature_RSI")
 
-
     # ---- corr matrix ----
     indicators: pd.DataFrame = []
     indicators.append(df['pct_close_futur'])
-    df['var'] = df['pct_close_futur'].rolling(window = ROLLING_WINDOW_SIZE).var()
-    df['parkinsons_var'] = fe.volatility.parkinson_volatility(df, window_size=ROLLING_WINDOW_SIZE,
-                                                              high_col = "High", low_col="Low")
+    df['var'] = df['pct_close_futur'].rolling(window=ROLLING_WINDOW_SIZE).var()
+    df['parkinsons_var'] = fe.volatility.parkinson_volatility(df,
+                                                              window_size=ROLLING_WINDOW_SIZE,
+                                                              high_col="High",
+                                                              low_col="Low")
     indicators.append(df['var'])
     indicators.append(df['parkinsons_var'])
 
     ilen = len(indicators)
     in_range = range(ilen)
-    corrmatrix = np.zeros((ilen, ilen), dtype = float)
+    corrmatrix = np.zeros((ilen, ilen), dtype=float)
 
     for i in in_range:
         # This works: for l in range(ilen - (ilen - i) + 1):
-        for l in in_range:
-            corrmatrix[i, l] = indicators[i].corr(indicators[l])
+        for length in in_range:
+            corrmatrix[i, length] = indicators[i].corr(indicators[length])
     
     cm_labels = [i.name for i in indicators]
 
     fig, ax = plt.subplots()
     im, cbar = heatmap.heatmap(corrmatrix, cm_labels, cm_labels, ax=ax,
                                cmap="YlGn", cbarlabel="Correlation coefficient")
-    texts = heatmap.annotate_heatmap(im)
+    _ = heatmap.annotate_heatmap(im)
 
     ax.set_title("Heatmap of correlation matrix of features")
 
@@ -422,16 +417,18 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     savefig(fig, "corrmatrix")
 
     # -------------- Target ---------------
-    df['target_future_returns_sign'] = te.directional.future_returns_sign(df, close_col = "Close")
+    df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
+                                                                          close_col="Close")
 
     # -------------- Regression ---------------
     # scikit-learn
     sklearn_reg = LinearRegression()
-    sklearn_reg.fit(pd.DataFrame(df['target_future_returns_sign']), pd.DataFrame(df['signal']))
+    sklearn_reg.fit(pd.DataFrame(df['target_future_returns_sign']),
+                    pd.DataFrame(df['signal']))
     # Model is now trained.
     print(f"coef: {sklearn_reg.coef_}")
     print(f"intercept: {sklearn_reg.intercept_}")
-    #reg.predict()
+    # reg.predict()
 
     # statsmodels
     # We copy the DataFrame because add_constant() adds a column.
@@ -467,11 +464,10 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
         # We want to maximize, so * -1
         return -1.0 * sharpe_ratio(df_ret['Close'])
 
-
-    x0 = (30) # window size
+    x0 = (30)  # window size
     bounds = ((2, 100),)
 
-    res = minimize(backtest, x0, bounds = bounds, options = {'disp': True})
+    res = minimize(backtest, x0, bounds=bounds, options={'disp': True})
 
     plot_vals = []
 
@@ -490,7 +486,7 @@ def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['pct_close_futur'], 'g')
     plt.xticks(rotation=70)
-    #plt.plot(df['pct_close_futur'], label='pct_close_futur')
+    # plt.plot(df['pct_close_futur'], label='pct_close_futur')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("pct_close_futur")
     plt.ylabel("pct_close_futur")
@@ -544,13 +540,13 @@ def main() -> int:
     df: pd.DataFrame = df_tickers[0]
 
     # For some reason the name differs.
-    df = df.rename(columns = {"1. open":    "Open",
-                              "2. high":    "High",
-                              "3. low":     "Low",
-                              "4. close":   "Close",
-                              "5. volume":  "Volume"})
+    df = df.rename(columns={"1. open":    "Open",
+                            "2. high":    "High",
+                            "3. low":     "Low",
+                            "4. close":   "Close",
+                            "5. volume":  "Volume"})
 
-    #df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
+    # df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
 
     df
 
@@ -563,9 +559,9 @@ def main() -> int:
 
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
-    #df = strategy_sma(df)
-    #df = strategy_Bollinger_RSI(df)
-    #investigate(df)
+    # df = strategy_sma(df)
+    # df = strategy_Bollinger_RSI(df)
+    # investigate(df)
     test_opt_Bollinger_RSI(df)
 
     df.to_csv("generated/df.csv")
@@ -573,26 +569,25 @@ def main() -> int:
     backtest(df)
 
     # Skip the other columns, backtest_static_portfolio() expects this.
-    #df = pd.DataFrame(df["returns"])
+    # df = pd.DataFrame(df["returns"])
 
-    #weights = (1)
-    #backtest_static_portfolio(weights, df)
+    # weights = (1)
+    # backtest_static_portfolio(weights, df)
 
     # ---------- Split ---------
-    #split_point = int(0.80 * len(df))
+    # split_point = int(0.80 * len(df))
 
     # TODO in/out of sample
-    #in_sample = # before
-    #out_sample = # after
+    # in_sample = # before
+    # out_sample = # after
 
     # "returns" is created in strategy()
-    #y_train = df[["returns"]].iloc[:split_point]
-    #X_train = df[["feature1", "feature2"]].iloc[:split_point]
+    # y_train = df[["returns"]].iloc[:split_point]
+    # X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
-    #broker: BrokerABC.BrokerABC = Broker.init()
+    # broker: BrokerABC.BrokerABC = Broker.init()
 
     return 0
-
 
     # https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation
     # ChatGPT: "I'm stuck in my financial quant project. What shall I do?":
@@ -611,11 +606,10 @@ def main() -> int:
 #        preds = model.predict(X_test)
 #        print(classification_report(y_test, preds))
 
-
-
 # Final function for the strategy takes at least the `symbol' as argument, and
 # returns a tuple with 2 Bools, for buy and sell. The function is pre-trained,
 # loads the model with joblib.load() or so, does a prediction and returns.
+
 
 if __name__ == "__main__":
     main()
