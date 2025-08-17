@@ -60,7 +60,7 @@
     \end{figure}
 }
 
-% Fix for \input in tables.
+% Fix for \input in tables. https://tex.stackexchange.com/questions/611786/misplaced-noalign-because-input-before-booktabs-rule
 \ExplSyntaxOn
 \cs_new:Npn \expandableinput #1
   { \use:c { @@input } { \file_full_name:n {#1} } }
