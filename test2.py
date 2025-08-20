@@ -91,15 +91,8 @@ print([3] * 2)
 t = (1, 2, 3, 4)
 print(t[:2])
 
+
 d = {'a': 1, 'b': 2, 'c': 3}
-
-print(d.get('d'))
-print(d.pop('e', 3.14))
-
-print(d)
-d.popitem()
-print(d)
-print(d.values())
 
 for value in d:
     print(value)
@@ -162,3 +155,142 @@ one, _ = f()
 
 print(one)
 print(_)
+
+text = "Big data analysis"
+print(text[4:-8] + "END") 
+
+x = 10
+
+def change():
+    global x
+    x += 5
+    print(l)
+
+change()
+
+
+dir(KeyboardInterrupt)
+
+#raise BaseException()
+
+try:
+    #raise BaseException("Error occurred")
+    raise ValueError()
+except BaseException as e:
+    print(type(e))
+
+
+#result = int("abc")
+
+import sys
+
+#sys.exit()
+
+
+print( ~10)
+print(~31)
+print(~0b00000101)
+print( 0b11111010)
+print(~0b11111010)
+
+s = "ASDASDAVXSC"
+
+print(s[-3:123123])
+
+try:
+    pass
+except ValueError as e:
+    pass
+except:
+    pass
+
+i = 0o11
+print(i)
+
+
+l = [1, 2, 3]
+
+l[0] = 2
+
+t = ([1, 2, 3], 2, 3)
+
+print(l)
+
+my_list = [5, 10, 15, 20, 25]
+
+print(my_list[::2])
+print(my_list[2::])
+
+
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+print(my_list[7:3:-1])
+
+t = (1)
+print(t)
+
+d = {'a': 1, 'b': 2, 'c': 3}
+
+for key in d:
+    print(key)
+
+
+count = 0
+for _ in []:
+    count += 1
+else:
+    count += 1
+
+print(count)
+
+power = 1 
+while power < 4:
+    power += 1
+    print("@", end="")
+    #if power == 3:
+        #break
+else:
+    print("@")
+
+i = 0
+while i < 3:
+    i += 1
+    continue
+else:
+    print("ELSE")
+
+
+def process(arg):
+    arg = 0
+
+data = 1
+process(data)
+print(data)
+
+print(list(range(5, 2, -1)))
+
+print(1 % 2)
+
+def process(data):
+    #data = data.copy()
+    data[1] = 2
+
+    #data = [4, 4, 4]
+    return data[-2]
+
+measurements = [0 for i in range(3)]
+process(measurements)
+print(measurements[-2])
+
+the_data = [True, 3.1415, -2]
+
+the_data.index(the_data[-1])
+
+l1 = [1, 2]
+l2 = [3, 4]
+
+print(l1 + l2)
+#l1.append(l2)
+print(l1)
+
+l1.extend(l2)
+print(l1)

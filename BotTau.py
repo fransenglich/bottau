@@ -437,7 +437,7 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     # variance_inflation_factor() needs this.
     features.dropna(inplace=True)
 
-    vifs = [(features.iloc[:, i].name, variance_inflation_factor(features, i)) for i in range(len(features.columns))]
+    vifs = [(features.columns.values[i], variance_inflation_factor(features, i)) for i in range(len(features.columns))]
 
     with open("generated/VIFs.tex", "w") as f:
         for name, vif in vifs:

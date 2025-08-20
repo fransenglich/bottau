@@ -40,3 +40,13 @@ class Strategy:
         """Returns tuple with two Bools. First is Buy, second is Sell."""
         #df = get_rates(symbol)
         pass
+
+
+data = {
+  "calories": [420, 380, 390],
+  "duration": [50, 40, 45]
+}
+
+df = pd.DataFrame(data)
+print(df)
+print(df.columns.values)
