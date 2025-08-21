@@ -311,10 +311,8 @@ def backtest(df: pd.DataFrame) -> None:
 
 def strategy_Bollinger_RSI(df: pd.DataFrame,
                            param_window: int = 20) -> pd.DataFrame:
-    """A somewhat random function that does:
-    * Bollinger bands
-    * RSI
-    """
+    """A strategy built on conditions involving Bollinger bands and RSI."""
+
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'],
                                                    window=int(param_window))
@@ -380,9 +378,6 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     return df
 
 
-# TODO:
-# - Factor out strategy-specific content
-# - standard features
 def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     """Writes data and graphs that are strategy-agnostic."""
 
