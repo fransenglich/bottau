@@ -1,27 +1,25 @@
                                 OLS Regression Results                                
 ======================================================================================
-Dep. Variable:     target_future_returns_sign   R-squared:                      -0.000
-Model:                                    OLS   Adj. R-squared:                 -0.000
-Method:                         Least Squares   F-statistic:                       nan
-Date:                        Thu, 21 Aug 2025   Prob (F-statistic):                nan
-Time:                                12:00:59   Log-Likelihood:                -72.399
-No. Observations:                         100   AIC:                             146.8
-Df Residuals:                              99   BIC:                             149.4
-Df Model:                                   0                                         
+Dep. Variable:     target_future_returns_sign   R-squared:                       0.023
+Model:                                    OLS   Adj. R-squared:                  0.013
+Method:                         Least Squares   F-statistic:                     2.308
+Date:                        Thu, 21 Aug 2025   Prob (F-statistic):              0.132
+Time:                                13:28:50   Log-Likelihood:                -71.235
+No. Observations:                         100   AIC:                             146.5
+Df Residuals:                              98   BIC:                             151.7
+Df Model:                                   1                                         
 Covariance Type:                    nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const          0.5300      0.050     10.566      0.000       0.430       0.630
-signal              0          0        nan        nan           0           0
+const          0.5408      0.050     10.743      0.000       0.441       0.641
+signal         0.5408      0.356      1.519      0.132      -0.166       1.247
 ==============================================================================
-Omnibus:                      814.468   Durbin-Watson:                   0.562
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):               16.668
-Skew:                          -0.120   Prob(JB):                     0.000240
-Kurtosis:                       1.014   Cond. No.                          inf
+Omnibus:                      847.060   Durbin-Watson:                   0.599
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               16.336
+Skew:                          -0.165   Prob(JB):                     0.000284
+Kurtosis:                       1.048   Cond. No.                         7.15
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The smallest eigenvalue is      0. This might indicate that there are
-strong multicollinearity problems or that the design matrix is singular.

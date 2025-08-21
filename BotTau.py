@@ -559,10 +559,10 @@ def main() -> int:
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
-    df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
+    df["pct_close_futur"] = (df["Close"].shift(-2) - df["Close"]) / df["Close"]
 
     df = strategy_Bollinger_RSI(df)
-    test_opt_Bollinger_RSI(df)
+    #test_opt_Bollinger_RSI(df)
 
     # df = strategy_sma(df)
     # investigate(df)
