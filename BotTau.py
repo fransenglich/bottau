@@ -447,34 +447,6 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
         for name, vif in vifs:
             f.write(name.replace("_", "\\_") + " & " + str(round(vif, 2)) + " \\\\\n")
 
-    # -------------- Target ---------------
-    df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
-                                                                          close_col="Close")
-
-    # -------------- Regression ---------------
-    # scikit-learn
-    sklearn_reg = LinearRegression()
-    sklearn_reg.fit(pd.DataFrame(df['target_future_returns_sign']),
-                    pd.DataFrame(df['signal']))
-    # Model is now trained.
-    print(f"coef: {sklearn_reg.coef_}")
-    print(f"intercept: {sklearn_reg.intercept_}")
-    # reg.predict()
-
-    # statsmodels
-    # We copy the DataFrame because add_constant() adds a column.
-    X = pd.DataFrame(df['signal'])
-    y = df['target_future_returns_sign']
-
-    X2 = sm.add_constant(X)
-    est = sm.OLS(y, X2)
-    est2 = est.fit()
-    print(est2.summary())
-
-    with open("generated/ols_conditions.txt", "w") as f:
-        # Possibly write est2.pvalues['signal']
-        f.write(str(est2.summary()))
-
     return df
 
 
@@ -594,11 +566,39 @@ def main() -> int:
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
 
     df = strategy_Bollinger_RSI(df)
+    test_opt_Bollinger_RSI(df)
 
     # df = strategy_sma(df)
-    # df = strategy_Bollinger_RSI(df)
     # investigate(df)
-    test_opt_Bollinger_RSI(df)
+
+    # -------------- Target ---------------
+    df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
+                                                                          close_col="Close")
+
+    # -------------- Regression ---------------
+    # scikit-learn
+    sklearn_reg = LinearRegression()
+    sklearn_reg.fit(pd.DataFrame(df['target_future_returns_sign']),
+                    pd.DataFrame(df['signal']))
+    # Model is now trained.
+    print(f"coef: {sklearn_reg.coef_}")
+    print(f"intercept: {sklearn_reg.intercept_}")
+    # reg.predict()
+
+    # statsmodels
+    # We copy the DataFrame because add_constant() adds a column.
+    X = pd.DataFrame(df['signal'])
+    y = df['target_future_returns_sign']
+
+    X2 = sm.add_constant(X)
+    est = sm.OLS(y, X2)
+    est2 = est.fit()
+    print(est2.summary())
+
+    with open("generated/ols_conditions.txt", "w") as f:
+        # Possibly write est2.pvalues['signal']
+        f.write(str(est2.summary()))
+
 
     df.to_csv("generated/df.csv")
     plot_and_write(df, ())
