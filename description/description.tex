@@ -131,6 +131,25 @@ volatility. The features used are as follows.
 
 \figureTau{spearmanmatrix}
 
+
+\subsection{Multicollinearity}
+
+See:
+
+\begin{itemize}
+    \item \url{https://en.wikipedia.org/wiki/Variance_inflation_factor}
+    \item \url{https://www.geeksforgeeks.org/python/detecting-multicollinearity-with-vif-python/}
+\end{itemize}
+
+\noindent
+Interpretation:
+
+\begin{itemize}
+    \item Values near 1 mean predictors are independent.
+    \item Values between 1 and 5 shows moderate correlation which is sometime acceptable.
+    \item Values above 10 signal problematic multicollinearity requiring action.
+\end{itemize}
+
 \begin{table}[H]
 \begin{center}
 \caption{Variance Inflation Factors (VIF).}
