@@ -339,11 +339,11 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     df.loc[condition_1_sell & condition_2_sell, "signal"] = -1
 
     # Compute our exit signal
-    df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
+    df["pct_close_futur"] = (df["Close"].shift(-2) - df["Close"])/df["Close"]
 
     # Compute the returns of each position
     # This is our computed trading signal applied to the returns
-    df["returns"] = df["signal"]*df["pct_close_futur"]
+    df["returns"] = df["signal"] * df["pct_close_futur"]
 
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=DEFAULT_FIGSIZE)

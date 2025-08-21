@@ -76,8 +76,7 @@
 
 \section{Introduction}
 
-This document describes the simulated in-sample performance of Bot Tau's trading
-strategy. It does not describe the strategy itself, which is proprietary.
+This document describes Bot Tau's trading strategy. Notice that this is one strategy, which is part of a portfolio.
 
 \section{Trading Plan}
 
@@ -117,6 +116,14 @@ Risk management conditions:
 \section{The Dataset}
 
 The dataset stretches from \constantStartdate \  to \constantEnddate.
+
+\section{Strategy}
+
+\begin{itemize}
+    \item Entry signal
+    \item Exit signal
+    \item Position sizing. Is it static or dynamic in some manner? For instance, percentage of current total capital.
+\end{itemize}
 
 \section{Features}
 
@@ -217,9 +224,11 @@ C = \constantTransactionCommission * t + spread/2
 
 \figureTau{cumulative_returns_except_trans_costs}
 
+\subsection{Further Robustness Tests}
+
 \section{Live Performance}
 
-The plan is to paper trade in a one month incubation period.
+The plan is to paper trade in a one-month incubation period.
 
 TODO compare return dist to back test return using Kolmogorov statistical test. % p. 311.
 
