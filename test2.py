@@ -294,3 +294,9 @@ print(l1)
 
 l1.extend(l2)
 print(l1)
+
+
+def f(t: tuple[str]):
+    return t
+
+f(("asd", "asd"))

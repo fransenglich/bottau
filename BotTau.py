@@ -354,8 +354,8 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
 
 # TODO:
 # - Factor out strategy-specific content
-# - Pass in column names for features in str list
-def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
+# - standard features
+def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
@@ -386,21 +386,25 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     plt.grid()
     savefig(plt, "feature_RSI")
 
+    # This is our design matrix.
+    designmatrix: pd.DataFrame = pd.DataFrame()
+
+    for name in featurenames:
+        designmatrix[name] = df[name]
+
+    # We do 3 things: add standard features, produce correlation matrix and VIF.
     # ---- corr matrix ----
 
-    # This is our design matrix.
-    features: pd.DataFrame = pd.DataFrame()
-
-    features['pct_close_futur'] = df['pct_close_futur']
+    designmatrix['pct_close_futur'] = df['pct_close_futur']
     df['var'] = df['pct_close_futur'].rolling(window=ROLLING_WINDOW_SIZE).var()
     df['parkinsons_var'] = fe.volatility.parkinson_volatility(df,
                                                               window_size=ROLLING_WINDOW_SIZE,
                                                               high_col="High",
                                                               low_col="Low")
-    features['var'] = df['var']
-    features['parkinsons_var'] = df['parkinsons_var']
+    designmatrix['var'] = df['var']
+    designmatrix['parkinsons_var'] = df['parkinsons_var']
 
-    flen = len(features.columns)
+    flen = len(designmatrix.columns)
     in_range = range(flen)
     pearsonmatrix = np.zeros((flen, flen), dtype=float)
     spearmanmatrix = np.zeros((flen, flen), dtype=float)
@@ -408,10 +412,10 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     for i in in_range:
         # This works: for l in range(ilen - (ilen - i) + 1):
         for length in in_range:
-            pearsonmatrix[i, length] = features.iloc[:, i].corr(features.iloc[:, length]) # TODO why to column length?
-            spearmanmatrix[i, length] = features.iloc[:, i].corr(features.iloc[:, length], method='spearman')
+            pearsonmatrix[i, length] = designmatrix.iloc[:, i].corr(designmatrix.iloc[:, length]) # TODO why to column length?
+            spearmanmatrix[i, length] = designmatrix.iloc[:, i].corr(designmatrix.iloc[:, length], method='spearman')
     
-    cm_labels = features.columns # [i.name for i in features.columns]
+    cm_labels = designmatrix.columns
 
     # - Pearson
     fig, ax = plt.subplots()
@@ -433,14 +437,12 @@ def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     fig.tight_layout()
     savefig(fig, "spearmanmatrix")
 
-
     # - Multicollinearity
-    # See https://www.geeksforgeeks.org/python/detecting-multicollinearity-with-vif-python/
 
     # variance_inflation_factor() needs this.
-    features.dropna(inplace=True)
+    designmatrix.dropna(inplace=True)
 
-    vifs = [(features.columns.values[i], variance_inflation_factor(features, i)) for i in range(len(features.columns))]
+    vifs = [(designmatrix.columns.values[i], variance_inflation_factor(designmatrix, i)) for i in range(len(designmatrix.columns))]
 
     with open("generated/VIFs.tex", "w") as f:
         for name, vif in vifs:
@@ -598,7 +600,7 @@ def main() -> int:
     test_opt_Bollinger_RSI(df)
 
     df.to_csv("generated/df.csv")
-    plot_and_write(df)
+    plot_and_write(df, ())
 
     backtest(df)
 
