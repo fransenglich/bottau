@@ -352,6 +352,9 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     return df
 
 
+# TODO:
+# - Factor out strategy-specific content
+# - Pass in column names for features in str list
 def plot_and_write(df: pd.DataFrame) -> pd.DataFrame:
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=DEFAULT_FIGSIZE)
