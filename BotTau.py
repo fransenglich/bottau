@@ -208,6 +208,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
 
 def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     plt.savefig(f"generated/{basename}.png")
+    matplotlib.pyplot.close()
 
 
 def backtest(df: pd.DataFrame) -> None:
