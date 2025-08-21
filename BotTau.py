@@ -313,8 +313,6 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     """A somewhat random function that does:
     * Bollinger bands
     * RSI
-    * Parkinson's volatility
-    * Heatmap of correlation matrix of features
     """
     # Bollinger Bands
     df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'],
@@ -348,14 +346,6 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     # This is our computed trading signal applied to the returns
     df["returns"] = df["signal"]*df["pct_close_futur"]
 
-    # print(df)
-    return df
-
-
-# TODO:
-# - Factor out strategy-specific content
-# - standard features
-def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=DEFAULT_FIGSIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
@@ -385,6 +375,15 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     plt.legend()
     plt.grid()
     savefig(plt, "feature_RSI")
+
+    return df
+
+
+# TODO:
+# - Factor out strategy-specific content
+# - standard features
+def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
+    """Writes data and graphs that are strategy-agnostic."""
 
     # This is our design matrix.
     designmatrix: pd.DataFrame = pd.DataFrame()
@@ -484,7 +483,7 @@ def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252) -> float:
     mean = portfolio.mean() * timeframe
     std = portfolio.std() * np.sqrt(timeframe)
 
-    return mean/std
+    return mean / std
 
 
 def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
@@ -593,6 +592,8 @@ def main() -> int:
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
     df["pct_close_futur"] = (df["Close"].shift(-2)-df["Close"])/df["Close"]
+
+    df = strategy_Bollinger_RSI(df)
 
     # df = strategy_sma(df)
     # df = strategy_Bollinger_RSI(df)

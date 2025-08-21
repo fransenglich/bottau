@@ -4,7 +4,7 @@ Dep. Variable:     target_future_returns_sign   R-squared:                      
 Model:                                    OLS   Adj. R-squared:                 -0.000
 Method:                         Least Squares   F-statistic:                       nan
 Date:                        Thu, 21 Aug 2025   Prob (F-statistic):                nan
-Time:                                11:18:48   Log-Likelihood:                -72.399
+Time:                                11:49:06   Log-Likelihood:                -72.399
 No. Observations:                         100   AIC:                             146.8
 Df Residuals:                              99   BIC:                             149.4
 Df Model:                                   0                                         
