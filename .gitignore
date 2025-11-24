@@ -2,6 +2,7 @@ Tickers/
 .vscode/
 .DS_Store
 output.svg
+*.*.swp
 df.csv
 *.pyc
 test2.py
