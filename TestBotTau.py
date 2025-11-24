@@ -5,7 +5,7 @@ class TestBotTau(unittest.TestCase):
     def test_dependencies(self):
         # TODO Check Python, Pandas, NumPy
         pass
-    
+
     def test_internetConnected(self):
         pass
 
@@ -20,4 +20,4 @@ class TestBotTau(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    
+

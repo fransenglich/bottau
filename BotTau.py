@@ -38,7 +38,8 @@ def CAGR(first: float, last: float, periods: int) -> float:
     return (last / first) ** (1 / periods) - 1
 
 
-def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 252, CR: bool =False):
+# Copied from Lucas.
+def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 252, CR: bool = False):
     """
     -----------------------------------------------------------------------------
     | Output: Backtest static portfolio                                         |
@@ -216,6 +217,7 @@ def backtest(df: pd.DataFrame) -> None:
 
     The passed DataFrame must have a column named returns, which is the
     returns of the strategy to be backtested."""
+
     # ---- Drawdown ----
     # 1 + & cumprod() because 'returns' are not log returns.
     df['comp_cumulative_returns'] = (1 + df['returns']).cumprod()
@@ -409,7 +411,7 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
         for length in in_range:
             pearsonmatrix[i, length] = designmatrix.iloc[:, i].corr(designmatrix.iloc[:, length]) # TODO why to column length?
             spearmanmatrix[i, length] = designmatrix.iloc[:, i].corr(designmatrix.iloc[:, length], method='spearman')
-    
+
     cm_labels = designmatrix.columns
 
     # - Pearson
@@ -448,6 +450,7 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
 
 def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252) -> float:
     """Computes the Sharpe Ratio for the returns in the passed Series."""
+
     mean = portfolio.mean() * timeframe
     std = portfolio.std() * np.sqrt(timeframe)
 
@@ -473,7 +476,7 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
     for i in range(bounds[0][0], bounds[0][1]):
         v = backtest(i)
         plot_vals.append(v)
-        
+
     print(res.message)
     print(res.x)
 
