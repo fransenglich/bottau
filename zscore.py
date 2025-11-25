@@ -5,7 +5,12 @@ import scipy.stats
 
 
 def main() -> None:
-    """Plots the Z-score for closing prices."""
+    """Plots rolling Z-scores for closing prices.
+
+    Notice that z-scores doesn't assume normally distributed, but if you want
+    to look up p-values they have to be. Interpretation should be affected by
+    actual distribution.
+    """
 
     WINDOW = 30
 
