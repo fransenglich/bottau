@@ -1,13 +1,14 @@
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
+import backtest
 import numpy as np
 import pandas as pd
 
 
-def AR_forecast(train_set):
+def AR_forecast(train_set: pd.DataFrame):
     p = 1
     model = ARIMA(train_set, order=(p, 0, 0))
 
-    model_fit = model.fit(disp=0)
+    model_fit = model.fit()
     forecast = model_fit.forecast()
 
     return forecast[0][0]
@@ -36,7 +37,14 @@ def AR_strategy(df: pd.DataFrame, returns: bool):
 
 
 def main():
-    pass
+    df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
+    df = df[::-1]
+    
+    # Standardize feature names
+    df.rename(columns={"4. close": "Adj Close"}, inplace=True)
+
+    df = AR_strategy(df, False)
+
 
 
 if __name__ == "__main__":
