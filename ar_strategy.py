@@ -5,10 +5,14 @@ import pandas as pd
 
 
 def AR_forecast(train_set: pd.DataFrame):
+    """
+    """
+
     p = 1
     model = ARIMA(train_set, order=(p, 0, 0))
 
     model_fit = model.fit()
+    print(model_fit.summary())
     forecast = model_fit.forecast()
 
     return forecast[0][0]
@@ -38,13 +42,13 @@ def AR_strategy(df: pd.DataFrame, returns: bool):
 
 def main():
     df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
+    df.index = pd.DatetimeIndex(df.index).to_period('D')
     df = df[::-1]
-    
+
     # Standardize feature names
     df.rename(columns={"4. close": "Adj Close"}, inplace=True)
 
     df = AR_strategy(df, False)
-
 
 
 if __name__ == "__main__":
