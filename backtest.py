@@ -255,16 +255,16 @@ def backtest(df: pd.DataFrame) -> None:
 
     # ---- Write constants ----
     with open("generated/constants.tex", "w") as f:
-        f.write(f"\def\constantMaxdrawdown{{{drawdown_max}}}")
-        f.write(f"\n\def\constantStartdate{{{df.index.min()}}}")
-        f.write(f"\n\def\constantEnddate{{{df.index.max()}}}")
-        f.write(f"\n\def\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
+        f.write(f"\\def\\constantMaxdrawdown{{{drawdown_max}}}")
+        f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
+        f.write(f"\n\\def\\constantEnddate{{{df.index.max()}}}")
+        f.write(f"\n\\def\\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
 
         rmean = np.round(df['returns'].mean() * 100, 4)
         std = np.round(df['returns'].std(), 4)
         sr = np.round(sharpe_ratio(df['returns']), 4)
-        f.write(f"\n\def\constantRMean{{{rmean}}}")
-        f.write(f"\n\def\constantSharpeRatio{{{sr}}}")
-        f.write(f"\n\def\constantStd{{{std}}}")
+        f.write(f"\n\\def\\constantRMean{{{rmean}}}")
+        f.write(f"\n\\def\\constantSharpeRatio{{{sr}}}")
+        f.write(f"\n\\def\\constantStd{{{std}}}")
 
-        f.write(f"\n\def\constantCalmarRatio{{{cr}}}")
+        f.write(f"\n\\def\\constantCalmarRatio{{{cr}}}")
