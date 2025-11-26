@@ -12,7 +12,7 @@ def main() -> None:
     actual distribution.
     """
 
-    WINDOW = 30
+    WINDOW_SIZE = 30
 
     df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
     df = df[::-1]
@@ -28,21 +28,21 @@ def main() -> None:
 
     for i in range(len(df)):
         df.iloc[i, col] = scipy.stats.zscore(df["4. close"]
-                                             .iloc[i:(i + WINDOW)],
+                                             .iloc[i:(i + WINDOW_SIZE)],
                                              ddof=1)[-1]
 
     plt.plot(df["scipy_zscore_rolling30"])
 
     # ---- Z-score manual
-    rolling_mean = df["4. close"].rolling(WINDOW).mean()
-    rolling_std = df["4. close"].rolling(WINDOW).std()
+    rolling_mean = df["4. close"].rolling(WINDOW_SIZE).mean()
+    rolling_std = df["4. close"].rolling(WINDOW_SIZE).std()
     df["manual_zscore_rolling30"] = (df["4. close"] - rolling_mean)/rolling_std
     plt.plot(df["manual_zscore_rolling30"])
 
     # ---- Plot
     plt.legend(("Z-score",
-                f"scipy Z-score {WINDOW} days",
-                f"Manual rolling Z-score {WINDOW} days"))
+                f"scipy Z-score {WINDOW_SIZE} days",
+                f"Manual rolling Z-score {WINDOW_SIZE} days"))
     plt.title("Z-scores for closing prices")
     plt.grid(axis='y', linestyle='-', alpha=0.5, color='lightgrey')
     plt.show()
