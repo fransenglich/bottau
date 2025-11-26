@@ -5,7 +5,7 @@ import scipy.stats
 
 
 def main() -> None:
-    """Plots rolling Z-scores for closing prices.
+    """Plots rolling z-scores for closing prices.
 
     Notice that z-scores doesn't assume normally distributed, but if you want
     to look up p-values they have to be. Interpretation should be affected by
@@ -17,12 +17,12 @@ def main() -> None:
     df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
     df = df[::-1]
 
-    # ---- Z-score
+    # ---- z-score
     df["zscore"] = scipy.stats.zscore(df["4. close"])
     plt.figure(figsize=(15, 8))
     plt.plot(df["zscore"])
 
-    # ---- Z-score scipy rolling
+    # ---- z-score rolling scipy
     df["scipy_zscore_rolling30"] = np.nan
     col = df.columns.get_loc("scipy_zscore_rolling30")
 
@@ -33,17 +33,17 @@ def main() -> None:
 
     plt.plot(df["scipy_zscore_rolling30"])
 
-    # ---- Z-score manual
+    # ---- z-score rolling Pandas
     rolling_mean = df["4. close"].rolling(WINDOW_SIZE).mean()
     rolling_std = df["4. close"].rolling(WINDOW_SIZE).std()
-    df["manual_zscore_rolling30"] = (df["4. close"] - rolling_mean)/rolling_std
-    plt.plot(df["manual_zscore_rolling30"])
+    df["pandas_zscore_rolling30"] = (df["4. close"] - rolling_mean)/rolling_std
+    plt.plot(df["pandas_zscore_rolling30"])
 
     # ---- Plot
-    plt.legend(("Z-score",
-                f"scipy Z-score {WINDOW_SIZE} days",
-                f"Manual rolling Z-score {WINDOW_SIZE} days"))
-    plt.title("Z-scores for closing prices")
+    plt.legend(("z-score",
+                f"scipy z-score {WINDOW_SIZE} days",
+                f"Pandas rolling z-score {WINDOW_SIZE} days"))
+    plt.title("z-scores for closing prices")
     plt.grid(axis='y', linestyle='-', alpha=0.5, color='lightgrey')
     plt.show()
 
