@@ -12,10 +12,10 @@ def AR_forecast(train_set: pd.DataFrame):
     model = ARIMA(train_set, order=(p, 0, 0))
 
     model_fit = model.fit()
-    print(model_fit.summary())
+    #print(model_fit.summary())
     forecast = model_fit.forecast()
 
-    return forecast[0][0]
+    return forecast.iloc[0]
 
 
 def AR_strategy(df: pd.DataFrame, returns: bool):
@@ -30,7 +30,6 @@ def AR_strategy(df: pd.DataFrame, returns: bool):
     if returns:
         df['returns'] = df['Adj Close']
         df['signal'] = np.where(df['predicted'] > 0, 1, -1)
-
     else:
         df['returns'] = df['Adj Close'].pct_change(1)
         df['signal'] = np.where(df['predicted'] > df['Adj Close'], 1, -1)
@@ -50,6 +49,7 @@ def main():
 
     df = AR_strategy(df, False)
 
+    backtest.backtest_static_portfolio((1), df)
 
 if __name__ == "__main__":
     main()
