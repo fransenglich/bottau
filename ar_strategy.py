@@ -47,6 +47,8 @@ def main():
     # Standardize feature names
     df.rename(columns={"4. close": "Adj Close"}, inplace=True)
 
+    df = df[0:100]
+
     df = AR_strategy(df, False)
 
     backtest.backtest_static_portfolio((1), df)

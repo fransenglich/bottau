@@ -78,6 +78,7 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     # Compute the drawdown
     drawdown = ((cum_rets)/running_max - 1)
     min_drawdown = -drawdown.min()
+    print(drawdown)
 
 
     ######################### COMPUTE THE VaR ##################################
