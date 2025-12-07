@@ -8,18 +8,25 @@ def plot_entropy(df: pd.DataFrame) -> None:
     Plots the entropy for returns, volatlity and skewness in the returns passed
     in the argument.
 
+    The function shows a plot using Matplotlib.
+
     See:
     - https://en.wikipedia.org/wiki/Entropy_(information_theory)
     """
+    # TODO docs on interpretation
 
     # 1. We need the probability for each value in `returns'
 
     # Counts occurrence of each value
     p_returns = df["returns"].value_counts()
 
+    print(len(p_returns))
+
     # Get entropy from count. We pass in count, which is ok because entropy()
     # accepts unnormalized values
     df["entropy_returns"] = scipy.stats.entropy(p_returns)
+
+    print(df["entropy_returns"])
 
     # vol = returns.stdev()
     # p_vol = vol.value_counts()
