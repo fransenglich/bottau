@@ -35,7 +35,7 @@ df_tickers = []
 
 
 # Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
-def CAGR(first: float, last: float, periods: int) -> float:
+def cagr(first: float, last: float, periods: int) -> float:
     return (last / first) ** (1 / periods) - 1
 
 

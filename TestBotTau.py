@@ -6,7 +6,7 @@ class TestBotTau(unittest.TestCase):
         # TODO Check Python, Pandas, NumPy
         pass
 
-    def test_internetConnected(self):
+    def test_internet_connected(self):
         pass
 
     def test_initialize(self):
@@ -15,7 +15,7 @@ class TestBotTau(unittest.TestCase):
     def test_main(self):
         pass
 
-    def test_externalExec(self):
+    def test_external_exec(self):
         pass
 
 if __name__ == "__main__":
