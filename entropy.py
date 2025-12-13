@@ -5,7 +5,7 @@ import scipy.stats
 
 def plot_entropy(df: pd.DataFrame) -> None:
     """
-    Plots the entropy for returns, volatlity and skewness in the returns passed
+    Plots the Shannon entropy for returns, volatlity and skewness in the returns passed
     in the argument.
 
     The function shows a plot using Matplotlib.
