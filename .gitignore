@@ -3,6 +3,7 @@ Tickers/
 .DS_Store
 output.svg
 *.*.swp
+description.log
 df.csv
 *.pyc
 test2.py
