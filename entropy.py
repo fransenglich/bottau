@@ -42,7 +42,7 @@ def main() -> None:
     # Standardize feature names
     df.rename(columns={"4. close": "Adj Close"}, inplace=True)
 
-    df = df[0:300]
+    # df = df[0:300]
 
     df.dropna(inplace=True)
 
@@ -55,19 +55,30 @@ def main() -> None:
         # 2. Calculate Shannon entropy on the counts.
         return scipy.stats.entropy(counts)
 
+    # Returns
     df["entropy_returns"] = df["returns"].rolling(window=WINDOW_SIZE) \
         .apply(rolling_entropy)
 
+    # Volatility
     df["vol_returns"] = df["returns"].rolling(window=WINDOW_SIZE).std()
 
     df["entropy_vol_returns"] = df["vol_returns"].rolling(window=WINDOW_SIZE) \
+        .apply(rolling_entropy)
+
+    # Skewness
+    df["skewness"] = df["returns"].rolling(window=WINDOW_SIZE).skew()
+    df["entropy_skewness"] = df["skewness"].rolling(window=WINDOW_SIZE) \
         .apply(rolling_entropy)
 
     # Plot
     plt.figure()
     plt.plot(df["entropy_returns"], label="Entropy Returns")
     plt.plot(df["entropy_vol_returns"], label="Volatility")
-    plt.legend(["Entropy Returns", "Entropy for Volatility"])
+    plt.plot(df["entropy_skewness"], label="Skewness")
+
+    plt.legend(["Entropy Returns",
+                "Entropy for Volatility",
+                "Entropy for Skewness"])
 
     plt.grid()
     plt.show()
