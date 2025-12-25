@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats
 
-WINDOW_SIZE = 30
+import constants
 
 
 def plot_entropy(df: pd.DataFrame) -> None:
@@ -50,24 +50,24 @@ def main() -> None:
 
     def rolling_entropy(window_data):
         # 1. Create a histogram to get frequencies.
-        counts, _ = np.histogram(window_data, WINDOW_SIZE)
+        counts, _ = np.histogram(window_data, constants.WINDOW_SIZE)
 
         # 2. Calculate Shannon entropy on the counts.
         return scipy.stats.entropy(counts)
 
     # Returns
-    df["entropy_returns"] = df["returns"].rolling(window=WINDOW_SIZE) \
+    df["entropy_returns"] = df["returns"].rolling(window=constants.WINDOW_SIZE) \
         .apply(rolling_entropy)
 
     # Volatility
-    df["vol_returns"] = df["returns"].rolling(window=WINDOW_SIZE).std()
+    df["vol_returns"] = df["returns"].rolling(window=constants.WINDOW_SIZE).std()
 
-    df["entropy_vol_returns"] = df["vol_returns"].rolling(window=WINDOW_SIZE) \
+    df["entropy_vol_returns"] = df["vol_returns"].rolling(window=constants.WINDOW_SIZE) \
         .apply(rolling_entropy)
 
     # Skewness
-    df["skewness"] = df["returns"].rolling(window=WINDOW_SIZE).skew()
-    df["entropy_skewness"] = df["skewness"].rolling(window=WINDOW_SIZE) \
+    df["skewness"] = df["returns"].rolling(window=constants.WINDOW_SIZE).skew()
+    df["entropy_skewness"] = df["skewness"].rolling(window=constants.WINDOW_SIZE) \
         .apply(rolling_entropy)
 
     # Plot

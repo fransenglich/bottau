@@ -1,0 +1,3 @@
+
+FIG_SIZE = (15, 6)
+WINDOW_SIZE = 30
