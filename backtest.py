@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+import constants
+
+
 # Copied from Lucas.
 def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 252, CR: bool = False):
     """
@@ -15,7 +18,6 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
     -----------------------------------------------------------------------------
     """
     import pandas as pd
-    import yfinance as yf
     import numpy as np
     from scipy.optimize import minimize
     import matplotlib.pyplot as plt
@@ -173,10 +175,11 @@ def backtest_static_portfolio(weights, database, ben="^GSPC", timeframe: int = 2
 
 
 def backtest(df: pd.DataFrame) -> None:
-    """A function by Lucas Inglese modified by me that plots and prints a backtest.
+    """A function by Lucas Inglese modified by me that plots and prints a
+    backtest.
 
-    The passed DataFrame must have a column named returns, which is the
-    returns of the strategy to be backtested."""
+    The passed DataFrame must have a column named returns, which is the returns
+    of the strategy to be backtested."""
 
     # ---- Drawdown ----
     # 1 + & cumprod() because 'returns' are not log returns.
@@ -184,7 +187,7 @@ def backtest(df: pd.DataFrame) -> None:
     df['cumulative_max'] = df['comp_cumulative_returns'].cummax()
     df['drawdown'] = ((df['comp_cumulative_returns'] - df['cumulative_max']) / df['cumulative_max']) * 100
 
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.plot(df['drawdown'], label="Drawdown")
     plt.title("Drawdown")
     plt.ylabel("Drawdown %")
@@ -192,13 +195,13 @@ def backtest(df: pd.DataFrame) -> None:
     savefig(plt, "drawdown")
 
     # ---- Drawdown Histogram----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
     savefig(plt, "drawdown_dist")
 
     # ---- Returns ----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.plot(df['returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Returns")
@@ -208,14 +211,14 @@ def backtest(df: pd.DataFrame) -> None:
     savefig(plt, "returns")
 
     # ---- Returns Histogram----
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
     savefig(plt, "returns_dist")
 
     # ---- Cumulative Returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.plot(df['cumulative_returns'], label='Returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns")
@@ -230,7 +233,7 @@ def backtest(df: pd.DataFrame) -> None:
 
     df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
 
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=constants.FIG_SIZE)
     plt.plot(df['cum_with_trans'], label='Netted returns')
     plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
     plt.title("Cumulative Returns Minus Transaction Costs")

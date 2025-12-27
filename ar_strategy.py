@@ -24,15 +24,15 @@ def AR_strategy(df: pd.DataFrame, returns: bool):
 
     splitpoint = int(len(df) * 0.70)
 
-    df['predicted'] = df['Adj Close'].rolling(splitpoint) \
+    df['predicted'] = df['close'].rolling(splitpoint) \
                                      .apply(AR_forecast)
 
     if returns:
-        df['returns'] = df['Adj Close']
+        df['returns'] = df['close']
         df['signal'] = np.where(df['predicted'] > 0, 1, -1)
     else:
-        df['returns'] = df['Adj Close'].pct_change(1)
-        df['signal'] = np.where(df['predicted'] > df['Adj Close'], 1, -1)
+        df['returns'] = df['close'].pct_change(1)
+        df['signal'] = np.where(df['predicted'] > df['close'], 1, -1)
 
     df['strategy'] = df['signal'].shift(1) * df['returns']
 
@@ -44,8 +44,12 @@ def main():
     df.index = pd.DatetimeIndex(df.index).to_period('D')
     df = df[::-1]
 
+    df = df[0:300]
+
     # Standardize feature names
-    df.rename(columns={"4. close": "Adj Close"}, inplace=True)
+    df.rename(columns={"4. close": "close",
+                       "date": "time"},
+                       inplace=True)
 
     df = df[0:100]
 
