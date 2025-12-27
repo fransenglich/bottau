@@ -2,14 +2,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import quantreo.target_engineering as te
 
-import constants
+import common
 
 
 def plot_future_returns(df: pd.DataFrame, close_col='returns') -> None:
     df["future_returns"] = te.magnitude.future_returns(df, close_col,
-                                                       constants.WINDOW_SIZE)
+                                                       common.WINDOW_SIZE)
 
-    plt.figure(figsize=constants.FIG_SIZE)
+    plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df["future_returns"])
     plt.title("Future Returns Target", size=15)
     plt.show()
