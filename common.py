@@ -13,6 +13,7 @@ TP = 0.021
 # Stop loss
 SL = 0.09
 
+
 def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     plt.savefig(f"generated/{basename}.png")
     matplotlib.pyplot.close()
