@@ -6,6 +6,13 @@ FIG_SIZE = (8, 4)
 WINDOW_SIZE = 30
 TRANSACTION_COMMISSION = 0.02
 
+# See Lucas' book, p. 295.
+# Take-profit
+TP = 0.021
+
+# Stop loss
+SL = 0.09
+
 def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     plt.savefig(f"generated/{basename}.png")
     matplotlib.pyplot.close()

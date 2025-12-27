@@ -20,12 +20,6 @@ import heatmap
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
 
-# See Lucas' book, p. 295.
-# Take-profit
-TP = 0.021
-# Stop loss
-SL = 0.09
-
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
 df_tickers = []
