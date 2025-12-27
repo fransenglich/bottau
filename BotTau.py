@@ -14,6 +14,7 @@ import ta
 
 import backtest
 import common
+from common import sharpe_ratio
 import download
 import heatmap
 
@@ -175,15 +176,6 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
             f.write(name.replace("_", "\\_") + " & " + str(round(vif, 2)) + " \\\\\n")
 
     return df
-
-
-def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252) -> float:
-    """Computes the Sharpe Ratio for the returns in the passed Series."""
-
-    mean = portfolio.mean() * timeframe
-    std = portfolio.std() * np.sqrt(timeframe)
-
-    return mean / std
 
 
 def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:

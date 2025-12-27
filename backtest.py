@@ -229,7 +229,7 @@ def backtest(df: pd.DataFrame) -> None:
 
     # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
-        return trade - (TRANSACTION_COMMISSION + trade/2)
+        return trade - (common.TRANSACTION_COMMISSION + trade/2)
 
     df['cum_with_trans'] = df['cumulative_returns'].map(transaction_cost)
 
@@ -262,11 +262,11 @@ def backtest(df: pd.DataFrame) -> None:
         f.write(f"\\def\\constantMaxdrawdown{{{drawdown_max}}}")
         f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
         f.write(f"\n\\def\\constantEnddate{{{df.index.max()}}}")
-        f.write(f"\n\\def\\constantTransactionCommission{{{TRANSACTION_COMMISSION}}}")
+        f.write(f"\n\\def\\constantTransactionCommission{{{common.TRANSACTION_COMMISSION}}}")
 
         rmean = np.round(df['returns'].mean() * 100, 4)
         std = np.round(df['returns'].std(), 4)
-        sr = np.round(sharpe_ratio(df['returns']), 4)
+        sr = np.round(common.sharpe_ratio(df['returns']), 4)
         f.write(f"\n\\def\\constantRMean{{{rmean}}}")
         f.write(f"\n\\def\\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\\def\\constantStd{{{std}}}")
