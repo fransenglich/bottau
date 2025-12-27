@@ -2,9 +2,9 @@ import matplotlib
 import numpy as np
 import pandas as pd
 
-FIG_SIZE = (15, 6)
+FIG_SIZE = (8, 4)
 WINDOW_SIZE = 30
-TRANSACTION_COMMISSION = 0.01 # TODO
+TRANSACTION_COMMISSION = 0.02
 
 def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     plt.savefig(f"generated/{basename}.png")

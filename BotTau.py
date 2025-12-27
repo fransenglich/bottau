@@ -19,9 +19,6 @@ import heatmap
 # Constants
 # ----------------------------------------------
 TICKERS = ['AAPL', 'TSLA']
-DEFAULT_FIGSIZE = (8, 4)
-TRANSACTION_COMMISSION = 0.02
-ROLLING_WINDOW_SIZE = 30
 
 # See Lucas' book, p. 295.
 # Take-profit
@@ -76,7 +73,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     df["returns"] = df["signal"] * df["pct_close_futur"]
 
     # Plot price with moving averages and Bollinger Bands
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df['Close'], label='Closing Price', color='black')
     plt.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
     plt.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted',
@@ -95,7 +92,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     common.savefig(plt, "feature_BollingerBands")
 
     # Plot RSI
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df['RSI'], label='RSI', color='purple')
     plt.axhline(70, linestyle='dashed', color='red', alpha=0.5)
     plt.axhline(30, linestyle='dashed', color='green', alpha=0.5)
@@ -121,9 +118,9 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     # ---- corr matrix ----
 
     designmatrix['pct_close_futur'] = df['pct_close_futur']
-    df['var'] = df['pct_close_futur'].rolling(window=ROLLING_WINDOW_SIZE).var()
+    df['var'] = df['pct_close_futur'].rolling(window=common.WINDOW_SIZE).var()
     df['parkinsons_var'] = fe.volatility.parkinson_volatility(df,
-                                                              window_size=ROLLING_WINDOW_SIZE,
+                                                              window_size=common.WINDOW_SIZE,
                                                               high_col="High",
                                                               low_col="Low")
     designmatrix['var'] = df['var']
@@ -204,7 +201,7 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
 
 
 def investigate(df: pd.DataFrame) -> None:
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df['pct_close_futur'], 'g')
     plt.xticks(rotation=70)
     # plt.plot(df['pct_close_futur'], label='pct_close_futur')
@@ -229,7 +226,7 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
 
     df['returns'] = df['signal'] * df['pct_close_futur']
 
-    plt.figure(figsize=DEFAULT_FIGSIZE)
+    plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df['Close'], label='Closing Price', linestyle='dotted', color='black')
     plt.plot(df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
     plt.plot(df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
