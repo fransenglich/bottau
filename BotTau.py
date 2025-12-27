@@ -13,6 +13,7 @@ import statsmodels.api as sm
 import ta
 
 import backtest
+import common
 import download
 import heatmap
 
@@ -37,11 +38,6 @@ df_tickers = []
 # Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
 def cagr(first: float, last: float, periods: int) -> float:
     return (last / first) ** (1 / periods) - 1
-
-
-def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
-    plt.savefig(f"generated/{basename}.png")
-    matplotlib.pyplot.close()
 
 
 def strategy_Bollinger_RSI(df: pd.DataFrame,
@@ -97,7 +93,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     plt.title("Bollinger Bands on Closing Prices - AAPL")
     plt.ylabel("Price")
     plt.grid()
-    savefig(plt, "feature_BollingerBands")
+    common.savefig(plt, "feature_BollingerBands")
 
     # Plot RSI
     plt.figure(figsize=DEFAULT_FIGSIZE)
@@ -108,7 +104,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     plt.ylabel("RSI")
     plt.legend()
     plt.grid()
-    savefig(plt, "feature_RSI")
+    common.savefig(plt, "feature_RSI")
 
     return df
 
@@ -155,7 +151,7 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
 
     ax.set_title("Heatmap of Pearson correlation matrix of features")
     fig.tight_layout()
-    savefig(fig, "pearsonmatrix")
+    common.savefig(fig, "pearsonmatrix")
 
     # - Spearman
     fig, ax = plt.subplots()
@@ -165,7 +161,7 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
 
     ax.set_title("Heatmap of Spearman correlation matrix of features")
     fig.tight_layout()
-    savefig(fig, "spearmanmatrix")
+    common.savefig(fig, "spearmanmatrix")
 
     # - Multicollinearity
 
