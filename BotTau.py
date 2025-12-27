@@ -3,7 +3,6 @@ import sys
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
 from statsmodels.stats.outliers_influence import variance_inflation_factor
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -14,7 +13,6 @@ import ta
 
 import backtest
 import common
-from common import sharpe_ratio
 import download
 import heatmap
 
@@ -185,7 +183,7 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
         df_ret = strategy_Bollinger_RSI(df, x)
 
         # We want to maximize, so * -1
-        return -1.0 * sharpe_ratio(df_ret['Close'])
+        return -1.0 * common.sharpe_ratio(df_ret['Close'])
 
     x0 = (30)  # window size
     bounds = ((2, 100),)
