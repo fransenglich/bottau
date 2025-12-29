@@ -153,7 +153,9 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     # variance_inflation_factor() needs this.
     designmatrix.dropna(inplace=True)
 
-    vifs = [(designmatrix.columns.values[i], variance_inflation_factor(designmatrix, i)) for i in range(len(designmatrix.columns))]
+    vifs = [(designmatrix.columns.values[i],
+             variance_inflation_factor(designmatrix, i))
+             for i in range(len(designmatrix.columns))]
 
     with open("generated/VIFs.tex", "w") as f:
         for name, vif in vifs:
