@@ -19,10 +19,29 @@ def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     matplotlib.pyplot.close()
 
 
-def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252) -> float:
+def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252, rf: float=0.01) -> float:
     """Computes the Sharpe Ratio for the returns in the passed Series."""
 
-    mean = portfolio.mean() * timeframe
+    mean = portfolio.mean() * timeframe - rf
     std = portfolio.std() * np.sqrt(timeframe)
 
     return mean / std
+
+
+def sortino_ratio(series: pd.Series, N: int, rf: float):
+    """Computes the Sortino ratio and returns it."""
+    mean = series.mean() * N - rf
+    std_neg = series[series < 0].std() * np.sqrt(N)
+
+    return mean / std_neg
+
+
+def max_drawdowns(returns: pd.Series):
+    comp_ret = (returns + 1).cumprod()
+    peak = comp_ret.expanding(min_periods = 1).max()
+    dd = (comp_ret / peak) - 1
+    return dd.min()
+
+
+def calmar_ratio(series: pd.Series, N: int=255):
+    return series.mean() * N / abs(max_drawdowns(series))
