@@ -19,8 +19,14 @@ def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
     matplotlib.pyplot.close()
 
 
-def sharpe_ratio(portfolio: pd.Series, timeframe: int = 252, rf: float=0.01) -> float:
-    """Computes the Sharpe Ratio for the returns in the passed Series."""
+def sharpe_ratio(portfolio: pd.Series,
+                 timeframe: int = 252,
+                 rf: float=0.01) -> float:
+    """Computes the Sharpe Ratio for the returns in the passed Series.
+    
+    See:
+    - https://www.codearmo.com/blog/sharpe-sortino-and-calmar-ratios-python
+    """
 
     mean = portfolio.mean() * timeframe - rf
     std = portfolio.std() * np.sqrt(timeframe)
