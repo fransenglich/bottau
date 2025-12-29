@@ -245,21 +245,16 @@ def backtest(df: pd.DataFrame) -> None:
     # TODO fx risk
 
     # ---- Drawdown ----
-    drawdown_max = np.round(abs(df['drawdown'].min()), 2) # Percent
-    print(f"Max drawdown: {drawdown_max}")
+    max_drawdown = common.max_drawdowns(df["returns"])
+    max_drawdown = np.round(max_drawdown, 2)
+    print(f"Max drawdown: {max_drawdown}")
 
-    # ---- Calmar Ratio ----
-    def calmar_ratio(returns: pd.Series, maxdrawdown: float) -> float:
-        """Returns the Calmar Ratio. Does not take into account the risk-free return."""
-        cagr: float = (returns * 100).sum() / len(returns)
-        return cagr / maxdrawdown
-
-    cr = calmar_ratio(df["returns"], drawdown_max)
+    cr = common.calmar_ratio(df["returns"])
     cr = np.round(cr, 4)
 
     # ---- Write constants ----
     with open("generated/constants.tex", "w") as f:
-        f.write(f"\\def\\constantMaxdrawdown{{{drawdown_max}}}")
+        f.write(f"\\def\\constantMaxdrawdown{{{max_drawdown}}}")
         f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
         f.write(f"\n\\def\\constantEnddate{{{df.index.max()}}}")
         f.write(f"\n\\def\\constantTransactionCommission{{{common.TRANSACTION_COMMISSION}}}")
