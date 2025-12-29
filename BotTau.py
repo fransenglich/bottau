@@ -25,15 +25,6 @@ TICKERS = ['AAPL', 'TSLA']
 df_tickers = []
 
 
-def cagr(first: float, last: float, periods: int) -> float:
-    """
-    Computes and returns CAGR value.
-
-    Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
-    """
-    return (last / first) ** (1 / periods) - 1
-
-
 def strategy_Bollinger_RSI(df: pd.DataFrame,
                            param_window: int = 20) -> pd.DataFrame:
     """A strategy built on conditions involving Bollinger bands and RSI."""

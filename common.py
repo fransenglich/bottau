@@ -45,3 +45,12 @@ def max_drawdowns(returns: pd.Series):
 
 def calmar_ratio(series: pd.Series, N: int=255):
     return series.mean() * N / abs(max_drawdowns(series))
+
+
+def cagr(first: float, last: float, periods: int) -> float:
+    """
+    Computes and returns CAGR value.
+
+    Nicked from https://feliperego.github.io/blog/2016/08/10/CAGR-Function-In-Python
+    """
+    return (last / first) ** (1 / periods) - 1
