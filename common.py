@@ -23,7 +23,7 @@ def sharpe_ratio(portfolio: pd.Series,
                  timeframe: int = 252,
                  rf: float=0.01) -> float:
     """Computes the Sharpe Ratio for the returns in the passed Series.
-    
+
     See:
     - https://www.codearmo.com/blog/sharpe-sortino-and-calmar-ratios-python
     """
