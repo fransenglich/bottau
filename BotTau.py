@@ -9,7 +9,6 @@ import pandas as pd
 import quantreo.features_engineering as fe
 import quantreo.target_engineering as te
 import statsmodels.api as sm
-import ta
 
 import backtest
 import common
