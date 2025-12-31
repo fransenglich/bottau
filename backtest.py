@@ -7,7 +7,8 @@ import common
 
 # Copied from Lucas.
 def backtest_static_portfolio(weights,
-                              database, ben="^GSPC",
+                              database,
+                              ben="^GSPC",
                               timeframe: int = 252,
                               CR: bool = False):
     """
