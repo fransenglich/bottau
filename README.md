@@ -15,6 +15,7 @@ Standardized feature names are as follows.
 |                                               | low       |
 | Close/Adjusted close                          | close     |
 | The strategy’s PnL                            | returns   |
+| | pct_close_futur |
 
 ## File Naming Conventions for Strategies
 
@@ -26,3 +27,4 @@ In folder Strategies/ for strategy X:
 | live_X.py	        | Runs the strategy. |
 | research_X.py	    | Essentially a playground. |
 | generated_X/	    | Generated files. |
+| input_X.csv       | The input data used as input, typically OHLCV. |
