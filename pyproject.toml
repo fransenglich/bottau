@@ -1,0 +1,4 @@
+[project]
+    name = "bottau"
+    version = "0.0.1"
+    description = "A quant trading bot."
