@@ -178,12 +178,18 @@ def backtest_static_portfolio(weights,
         plt.show()
 
 
-def backtest(df: pd.DataFrame) -> None:
+def backtest(sn: str,
+             df: pd.DataFrame) -> None:
     """A function by Lucas Inglese modified by me that plots and prints a
     backtest.
 
+    Argument sn is strategy name.
+
     The passed DataFrame must have a column named returns, which is the returns
     of the strategy to be backtested."""
+
+    if "returns" not in df.columns:
+        raise ValueError("The passed DataFrame must have a 'returns' column.")
 
     # ---- Drawdown ----
     # 1 + & cumprod() because 'returns' are not log returns.
@@ -198,7 +204,7 @@ def backtest(df: pd.DataFrame) -> None:
     plt.legend()
     common.savefig(plt, "drawdown")
 
-    # ---- Drawdown Histogram----
+    # ---- Drawdown Histogram ----
     plt.figure(figsize=common.FIG_SIZE)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
@@ -214,7 +220,7 @@ def backtest(df: pd.DataFrame) -> None:
     plt.grid()
     common.savefig(plt, "returns")
 
-    # ---- Returns Histogram----
+    # ---- Returns Histogram ----
     plt.figure(figsize=common.FIG_SIZE)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
@@ -257,7 +263,7 @@ def backtest(df: pd.DataFrame) -> None:
     cr = np.round(cr, 4)
 
     # ---- Write constants ----
-    with open("generated/constants.tex", "w") as f:
+    with open(f"generated_{sn}/constants.tex", "w") as f:
         f.write(f"\\def\\constantMaxdrawdown{{{max_drawdown}}}")
         f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
         f.write(f"\n\\def\\constantEnddate{{{df.index.max()}}}")

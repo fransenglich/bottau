@@ -14,8 +14,10 @@ TP = 0.021
 SL = 0.09
 
 
-def savefig(plt: matplotlib.figure.Figure, basename: str) -> None:
-    plt.savefig(f"generated/{basename}.png")
+def savefig(plt: matplotlib.figure.Figure,
+            basename: str,
+            strategy_name: str) -> None:
+    plt.savefig(f"generated_{strategy_name}/{basename}.png")
     matplotlib.pyplot.close()
 
 
