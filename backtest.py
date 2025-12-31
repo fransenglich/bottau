@@ -202,13 +202,13 @@ def backtest(sn: str,
     plt.title("Drawdown")
     plt.ylabel("Drawdown %")
     plt.legend()
-    common.savefig(plt, "drawdown")
+    common.savefig(plt, "drawdown", sn)
 
     # ---- Drawdown Histogram ----
     plt.figure(figsize=common.FIG_SIZE)
     plt.hist(df['drawdown'], bins='auto')
     plt.title("Drawdown Distribution")
-    common.savefig(plt, "drawdown_dist")
+    common.savefig(plt, "drawdown_dist", sn)
 
     # ---- Returns ----
     plt.figure(figsize=common.FIG_SIZE)
@@ -218,13 +218,13 @@ def backtest(sn: str,
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    common.savefig(plt, "returns")
+    common.savefig(plt, "returns", sn)
 
     # ---- Returns Histogram ----
     plt.figure(figsize=common.FIG_SIZE)
     plt.hist(df['returns'], bins='auto')
     plt.title("Returns Distribution")
-    common.savefig(plt, "returns_dist")
+    common.savefig(plt, "returns_dist", sn)
 
     # ---- Cumulative Returns ----
     df['cumulative_returns'] = df['returns'].cumsum()
@@ -235,7 +235,7 @@ def backtest(sn: str,
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    common.savefig(plt, "cumulative_returns")
+    common.savefig(plt, "cumulative_returns", sn)
 
     # ---- Cumulative Returns Minus Transaction Costs ----
     def transaction_cost(trade: float) -> float:
@@ -250,7 +250,7 @@ def backtest(sn: str,
     plt.ylabel("Returns")
     plt.legend()
     plt.grid()
-    common.savefig(plt, "cumulative_returns_except_trans_costs")
+    common.savefig(plt, "cumulative_returns_except_trans_costs", sn)
     # TODO simulate slippage
     # TODO fx risk
 
@@ -277,3 +277,8 @@ def backtest(sn: str,
         f.write(f"\n\\def\\constantStd{{{std}}}")
 
         f.write(f"\n\\def\\constantCalmarRatio{{{cr}}}")
+
+
+def backtest2(sn: str,
+              df: pd.DataFrame) -> None:
+    pass
