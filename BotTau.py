@@ -16,9 +16,6 @@ import common
 import download
 import heatmap
 
-# Constants
-# ----------------------------------------------
-TICKERS = ['AAPL', 'TSLA']
 
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
