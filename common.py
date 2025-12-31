@@ -36,7 +36,9 @@ def sharpe_ratio(portfolio: pd.Series,
     return mean / std
 
 
-def sortino_ratio(series: pd.Series, N: int, rf: float):
+def sortino_ratio(series: pd.Series,
+                  N: int=252,
+                  rf: float=0.01):
     """Computes the Sortino ratio and returns it."""
     mean = series.mean() * N - rf
     std_neg = series[series < 0].std() * np.sqrt(N)

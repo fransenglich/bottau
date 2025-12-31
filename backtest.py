@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -178,8 +180,7 @@ def backtest_static_portfolio(weights,
         plt.show()
 
 
-def backtest(sn: str,
-             df: pd.DataFrame) -> None:
+def backtest(df: pd.DataFrame, sn: str) -> None:
     """A function by Lucas Inglese modified by me that plots and prints a
     backtest.
 
@@ -262,7 +263,13 @@ def backtest(sn: str,
     cr = common.calmar_ratio(df["returns"])
     cr = np.round(cr, 4)
 
+    # ---- Sortino Ratio ----
+    sr = common.sortino_ratio(df["returns"])
+    sr = np.round(sr, 4)
+
     # ---- Write constants ----
+    os.makedirs(f"generated_{sn}", exist_ok=True)
+
     with open(f"generated_{sn}/constants.tex", "w") as f:
         f.write(f"\\def\\constantMaxdrawdown{{{max_drawdown}}}")
         f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
@@ -275,8 +282,8 @@ def backtest(sn: str,
         f.write(f"\n\\def\\constantRMean{{{rmean}}}")
         f.write(f"\n\\def\\constantSharpeRatio{{{sr}}}")
         f.write(f"\n\\def\\constantStd{{{std}}}")
-
         f.write(f"\n\\def\\constantCalmarRatio{{{cr}}}")
+        f.write(f"\n\\def\\constantSortinoRatio{{{sr}}}")
 
 
 def backtest2(sn: str,
