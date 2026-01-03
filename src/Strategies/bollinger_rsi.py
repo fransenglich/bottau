@@ -2,7 +2,7 @@ import pandas as pd
 import ta
 import matplotlib.pyplot as plt
 
-import common
+from lib import common
 
 
 def strategy_Bollinger_RSI(df: pd.DataFrame,
