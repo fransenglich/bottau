@@ -13,7 +13,7 @@ import statsmodels.api as sm
 import backtest
 import common
 import download
-import heatmap
+import src.lib.heatmap as heatmap
 from Strategies.bollinger_rsi import strategy_Bollinger_RSI
 
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V

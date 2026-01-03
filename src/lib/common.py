@@ -20,7 +20,7 @@ def savefig(plt: matplotlib.figure.Figure,
             basename: str,
             strategy_name: str) -> None:
     path = os.path.join(os.path.dirname(__file__),
-                            f"../Strategies/generated_{strategy_name}")
+                            f"../strategies/generated_{strategy_name}")
 
     os.makedirs(path, exist_ok=True)
     plt.savefig(f"{path}/{basename}.png")

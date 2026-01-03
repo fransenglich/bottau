@@ -269,7 +269,7 @@ def backtest(df: pd.DataFrame, sn: str) -> None:
 
     # ---- Write constants ----
     path = os.path.join(os.path.dirname(__file__),
-                            f"../Strategies/generated_{sn}")
+                        f"../strategies/generated_{sn}")
     os.makedirs(path, exist_ok=True)
 
     with open(f"{path}/constants.tex", "w") as f:
