@@ -49,7 +49,7 @@ def main() -> None:
                             "High":         "high",
                             "Low":          "low",
                             "Adj Close":    "close"})
-    df.drop(("Ticker", "Volume", "Close"))
+    df.drop(["Ticker", "Volume", "Close"], axis=1)
 
     df["pct_close_futur"] = (df["close"].shift(-2) - df["close"]) / df["close"]
 

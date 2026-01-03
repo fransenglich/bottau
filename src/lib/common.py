@@ -1,3 +1,5 @@
+import os
+
 import matplotlib
 import numpy as np
 import pandas as pd
@@ -17,7 +19,11 @@ SL = 0.09
 def savefig(plt: matplotlib.figure.Figure,
             basename: str,
             strategy_name: str) -> None:
-    plt.savefig(f"generated_{strategy_name}/{basename}.png")
+    path = os.path.join(os.path.dirname(__file__),
+                            f"../Strategies/generated_{strategy_name}")
+
+    os.makedirs(path, exist_ok=True)
+    plt.savefig(f"{path}/{basename}.png")
     matplotlib.pyplot.close()
 
 
