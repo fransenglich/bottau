@@ -6,6 +6,21 @@
     name = "bottau"
     version = "0.0.1"
     description = "A quant trading bot."
+    readme = "README.md"
+    license = "LicenseRef-Proprietary"
+    keywords = ["finance", "quant", "ML"]
+    classifiers = ["Development Status :: 2 - Pre-Alpha ",
+                   "Private :: Do Not Upload"]
+    authors = [
+      {name = "Frans Englich", email = "fenglich@fastmail.fm"}]
+
+    dependencies = ["numpy",
+                    "matplotlib",
+                    "pandas",
+                    "quantreo"]
+
+[project.urls]
+    Homepage = "https://github.com/fransenglich/bottau"
 
 [tool.setuptools.packages.find]
     where = ["src"]
