@@ -10,11 +10,11 @@ import quantreo.features_engineering as fe
 import quantreo.target_engineering as te
 import statsmodels.api as sm
 
-import backtest
-import common
-import download
-import src.lib.heatmap as heatmap
-from Strategies.bollinger_rsi import strategy_Bollinger_RSI
+from lib import backtest
+from lib import common
+from lib import download
+from lib import heatmap
+from strategies.bollinger_rsi import strategy_Bollinger_RSI
 
 # Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
 # format.
