@@ -1,8 +1,10 @@
+import os
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import backtest
-import common
+import lib.common
+from lib import backtest
 
 
 def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
@@ -18,7 +20,7 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
 
     df['returns'] = df['signal'] * df['pct_close_futur']
 
-    plt.figure(figsize=common.FIG_SIZE)
+    plt.figure(figsize=lib.common.FIG_SIZE)
     plt.plot(df['Close'], label='Closing Price', linestyle='dotted', color='black')
     plt.plot(df['SMA5'], label='SMA 5', linestyle='dotted', color='red')
     plt.plot(df['SMA30'], label='SMA 30', linestyle='dotted', color='green')
@@ -32,7 +34,9 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    df = pd.read_csv("../Tickers/AAPL.csv", index_col="date", parse_dates=True)
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "../../Tickers/AAPL.csv"),
+                     index_col="Date",
+                     parse_dates=True)
 
     # Dropping NaNs.
     len_before = len(df)
