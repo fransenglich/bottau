@@ -16,14 +16,18 @@ TP = 0.021
 SL = 0.09
 
 
+def generated_file(filename: str, strategyname: str) -> str:
+    path = os.path.join(os.path.dirname(__file__),
+                        f"../strategies/generated_{strategyname}")
+    os.makedirs(path, exist_ok=True)
+
+    return os.path.join(path, filename)
+
+
 def savefig(plt: matplotlib.figure.Figure,
             basename: str,
-            strategy_name: str) -> None:
-    path = os.path.join(os.path.dirname(__file__),
-                            f"../strategies/generated_{strategy_name}")
-
-    os.makedirs(path, exist_ok=True)
-    plt.savefig(f"{path}/{basename}.png")
+            strategyname: str) -> None:
+    plt.savefig(generated_file(basename + ".png", strategyname))
     matplotlib.pyplot.close()
 
 

@@ -268,11 +268,9 @@ def backtest(df: pd.DataFrame, sn: str) -> None:
     sr = np.round(sr, 4)
 
     # ---- Write constants ----
-    path = os.path.join(os.path.dirname(__file__),
-                        f"../strategies/generated_{sn}")
-    os.makedirs(path, exist_ok=True)
+    fn = common.generated_file("constants.tex", sn)
 
-    with open(f"{path}/constants.tex", "w") as f:
+    with open(fn, "w") as f:
         f.write(f"\\def\\constantMaxdrawdown{{{max_drawdown}}}")
         f.write(f"\n\\def\\constantStartdate{{{df.index.min()}}}")
         f.write(f"\n\\def\\constantEnddate{{{df.index.max()}}}")
