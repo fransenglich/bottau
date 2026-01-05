@@ -13,33 +13,6 @@ from lib import ml_modelling
 from strategies.bollinger_rsi import strategy_Bollinger_RSI
 
 
-def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
-
-    def backtest(x) -> float:
-        # We evaluate based on the Sharpe Ratio
-        df_ret = strategy_Bollinger_RSI(df, x)
-
-        # We want to maximize, so * -1
-        return -1.0 * common.sharpe_ratio(df_ret['close'])
-
-    x0 = (30)  # window size
-    bounds = ((2, 100),)
-
-    res = minimize(backtest, x0, bounds=bounds, options={'disp': True})
-
-    plot_vals = []
-
-    for i in range(bounds[0][0], bounds[0][1]):
-        v = backtest(i)
-        plot_vals.append(v)
-
-    print(res.message)
-    print(res.x)
-
-    plt.plot(plot_vals)
-    # plt.show()
-
-
 def investigate(df: pd.DataFrame) -> None:
     plt.figure(figsize=common.FIG_SIZE)
     plt.plot(df['pct_close_futur'], 'g')
