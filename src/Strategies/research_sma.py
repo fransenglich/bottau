@@ -34,7 +34,8 @@ def strategy_sma(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "../../Tickers/AAPL.csv"),
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__),
+                                  "../../Tickers/AAPL.csv"),
                      index_col="Date",
                      parse_dates=True)
 
