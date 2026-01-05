@@ -181,6 +181,5 @@ def main() -> int:
 # returns a tuple with 2 Bools, for buy and sell. The function is pre-trained,
 # loads the model with joblib.load() or so, does a prediction and returns.
 
-
 if __name__ == "__main__":
     main()

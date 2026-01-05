@@ -284,8 +284,3 @@ def backtest(df: pd.DataFrame, sn: str) -> None:
         f.write(f"\n\\def\\constantStd{{{std}}}")
         f.write(f"\n\\def\\constantCalmarRatio{{{cr}}}")
         f.write(f"\n\\def\\constantSortinoRatio{{{sr}}}")
-
-
-def backtest2(sn: str,
-              df: pd.DataFrame) -> None:
-    pass
