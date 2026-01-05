@@ -10,22 +10,22 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     """A strategy built on conditions involving Bollinger bands and RSI."""
 
     # Bollinger Bands
-    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['Close'],
+    df['BB_Middle'] = ta.volatility.bollinger_mavg(df['close'],
                                                    window=int(param_window))
-    df['BB_Upper'] = ta.volatility.bollinger_hband(df['Close'],
+    df['BB_Upper'] = ta.volatility.bollinger_hband(df['close'],
                                                    window=int(param_window))
-    df['BB_Lower'] = ta.volatility.bollinger_lband(df['Close'],
+    df['BB_Lower'] = ta.volatility.bollinger_lband(df['close'],
                                                    window=int(param_window))
 
     # RSI
-    df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
+    df['RSI'] = ta.momentum.rsi(df['close'], window=14)
 
     # Create our signal
     df["signal"] = 0
 
     # Define our conditions
-    condition_1_buy = df["Close"] < df["BB_Lower"]
-    condition_1_sell = df["BB_Upper"] < df["Close"]
+    condition_1_buy = df["close"] < df["BB_Lower"]
+    condition_1_sell = df["BB_Upper"] < df["close"]
 
     condition_2_buy = df["RSI"] < 30
     condition_2_sell = df["RSI"] > 70
@@ -35,7 +35,7 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     df.loc[condition_1_sell & condition_2_sell, "signal"] = -1
 
     # Compute our exit signal
-    df["pct_close_futur"] = (df["Close"].shift(-2) - df["Close"])/df["Close"]
+    df["pct_close_futur"] = (df["close"].shift(-2) - df["close"])/df["close"]
 
     # Compute the returns of each position
     # This is our computed trading signal applied to the returns
@@ -43,22 +43,22 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
 
     # Plot price with moving averages and Bollinger Bands
     plt.figure(figsize=common.FIG_SIZE)
-    plt.plot(df['Close'], label='Closing Price', color='black')
+    plt.plot(df['close'], label='Closing Price', color='black')
     plt.plot(df['BB_Upper'], label='BB Upper', linestyle='dotted', color='red')
     plt.plot(df['BB_Lower'], label='BB Lower', linestyle='dotted',
              color='green')
 
     # Plot Buy/Sell Signals
-    plt.scatter(df.index[df['signal'] == -1], df['Close'][df['signal'] == -1],
+    plt.scatter(df.index[df['signal'] == -1], df['close'][df['signal'] == -1],
                 marker='v', color='red', label='Sell Signal', s=50)
-    plt.scatter(df.index[df['signal'] == 1], df['Close'][df['signal'] == 1],
+    plt.scatter(df.index[df['signal'] == 1], df['close'][df['signal'] == 1],
                 marker='^', color='green', label='Buy Signal', s=50)
 
     plt.legend()
     plt.title("Bollinger Bands on Closing Prices - AAPL")
     plt.ylabel("Price")
     plt.grid()
-    common.savefig(plt, "feature_BollingerBands")
+    common.savefig(plt, "feature_BollingerBands", "ibm")
 
     # Plot RSI
     plt.figure(figsize=common.FIG_SIZE)
@@ -69,6 +69,6 @@ def strategy_Bollinger_RSI(df: pd.DataFrame,
     plt.ylabel("RSI")
     plt.legend()
     plt.grid()
-    common.savefig(plt, "feature_RSI")
+    common.savefig(plt, "feature_RSI", "ibm")
 
     return df

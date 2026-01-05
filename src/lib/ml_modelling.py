@@ -34,26 +34,18 @@ def investigate(df: pd.DataFrame,
     designmatrix['var'] = df['var']
 
     df['vol_parkinson_30'] = fe.volatility.parkinson_volatility(df,
-                                                                high_col="High",
-                                                                low_col="Low",
                                                                 window_size=30)
     designmatrix['vol_parkinson_30'] = df['vol_parkinson_30']
 
     df['vol_parkinson_60'] = fe.volatility.parkinson_volatility(df,
-                                                                high_col="High",
-                                                                low_col="Low",
                                                                 window_size=60)
     designmatrix['vol_parkinson_60'] = df['vol_parkinson_60']
 
     df['vol_ctc_30'] = fe.volatility.close_to_close_volatility(df,
-                                                               high_col="High",
-                                                               low_col="Low",
                                                                window_size=30)
     designmatrix['vol_ctc_30'] = df['vol_ctc_30']
 
     df['vol_ctc_60'] = fe.volatility.close_to_close_volatility(df,
-                                                               high_col="High",
-                                                               low_col="Low",
                                                                window_size=60)
     designmatrix['vol_ctc_60'] = df['vol_ctc_60']
 
@@ -78,7 +70,7 @@ def investigate(df: pd.DataFrame,
 
     ax.set_title("Heatmap of Pearson correlation matrix of features")
     fig.tight_layout()
-    common.savefig(fig, "pearsonmatrix")
+    common.savefig(fig, "pearsonmatrix", strategyname)
 
     # - Spearman
     fig, ax = plt.subplots()
@@ -88,7 +80,7 @@ def investigate(df: pd.DataFrame,
 
     ax.set_title("Heatmap of Spearman correlation matrix of features")
     fig.tight_layout()
-    common.savefig(fig, "spearmanmatrix")
+    common.savefig(fig, "spearmanmatrix", strategyname)
 
     # - Multicollinearity
 

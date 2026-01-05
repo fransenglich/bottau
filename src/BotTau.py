@@ -9,13 +9,8 @@ import statsmodels.api as sm
 
 from lib import backtest
 from lib import common
-from lib import download
 from lib import ml_modelling
 from strategies.bollinger_rsi import strategy_Bollinger_RSI
-
-# Data Frames of tickers, comes from Yahoo Finance and are in classic OHLC(Adj)V
-# format.
-df_tickers = []
 
 
 def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
@@ -25,7 +20,7 @@ def test_opt_Bollinger_RSI(df: pd.DataFrame) -> None:
         df_ret = strategy_Bollinger_RSI(df, x)
 
         # We want to maximize, so * -1
-        return -1.0 * common.sharpe_ratio(df_ret['Close'])
+        return -1.0 * common.sharpe_ratio(df_ret['close'])
 
     x0 = (30)  # window size
     bounds = ((2, 100),)
@@ -59,33 +54,20 @@ def investigate(df: pd.DataFrame) -> None:
  
 
 def main() -> int:
-    # TODO This function does too much. Attempts live data loading etc.
-
     plt.ioff()
 
-    if len(sys.argv) == 2:
-        if sys.argv[1] == "i":
-            df_tickers.append(download.initialDownload())
-        elif sys.argv[1] == "c":
-            df_tickers.append(download.fetchNewTicks())
-        else:
-            raise Exception("No or wrong commandline argument passed.")
-    else:
-        df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
+    df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
 
-        # Reverse, get increasing dates. Specific to IBM.csv.
-        df = df[::-1]
-
-        df_tickers.append(df)
-
-    df: pd.DataFrame = df_tickers[0]
+    # Reverse, get increasing dates. Specific to IBM.csv.
+    df = df[::-1]
 
     # For some reason the name differs.
-    df = df.rename(columns={"1. open":    "Open",
-                            "2. high":    "High",
-                            "3. low":     "Low",
-                            "4. close":   "Close",
-                            "5. volume":  "Volume"})
+    df = df.rename(columns={"date":     "time",
+                            "1. open":  "open",
+                            "2. high":  "high",
+                            "3. low":   "low",
+                            "4. close": "close"})
+    df.drop(["5. volume"], axis=1)
 
     # df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
 
@@ -98,7 +80,7 @@ def main() -> int:
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
-    df["pct_close_futur"] = (df["Close"].shift(-2) - df["Close"]) / df["Close"]
+    df["pct_close_futur"] = (df["close"].shift(-2) - df["close"]) / df["close"]
 
     df = strategy_Bollinger_RSI(df)
     #test_opt_Bollinger_RSI(df)
@@ -108,7 +90,7 @@ def main() -> int:
 
     # -------------- Target ---------------
     df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
-                                                                          close_col="Close")
+                                                                          close_col="close")
 
     # -------------- Regression ---------------
     # scikit-learn
@@ -130,14 +112,14 @@ def main() -> int:
     est2 = est.fit()
     print(est2.summary())
 
-    with open("generated/ols_conditions.txt", "w") as f:
+    with open(common.generated_file("ols_conditions.txt", "ibm"), "w") as f:
         # Possibly write est2.pvalues['signal']
         f.write(str(est2.summary()))
 
-    df.to_csv("generated/df.csv")
+    # df.to_csv("generated/df.csv")
     ml_modelling.investigate(df, (), "ibm")
 
-    backtest.backtest(df)
+    backtest.backtest(df, "ibm")
 
     # Skip the other columns, backtest_static_portfolio() expects this.
     # df = pd.DataFrame(df["returns"])
