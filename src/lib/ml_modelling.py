@@ -12,7 +12,9 @@ This file contains functions specific to ML models.
 """
 
 
-def investigate(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
+def investigate(df: pd.DataFrame,
+                featurenames: tuple[str],
+                strategyname: str) -> pd.DataFrame:
     """Writes data and graphs that are strategy-agnostic.
     
     This is specific to features used in regressions."""
@@ -97,7 +99,7 @@ def investigate(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
              variance_inflation_factor(designmatrix, i))
              for i in range(len(designmatrix.columns))]
 
-    with open("generated/VIFs.tex", "w") as f:
+    with open(common.generated_file("VIFs.tex", strategyname), "w") as f:
         for name, vif in vifs:
             f.write(name.replace("_", "\\_") + " & " + str(round(vif, 2)) + " \\\\\n")
 

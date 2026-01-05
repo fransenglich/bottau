@@ -135,7 +135,7 @@ def main() -> int:
         f.write(str(est2.summary()))
 
     df.to_csv("generated/df.csv")
-    ml_modelling.investigate(df, ())
+    ml_modelling.investigate(df, (), "ibm")
 
     backtest.backtest(df)
 

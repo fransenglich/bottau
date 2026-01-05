@@ -17,6 +17,12 @@ SL = 0.09
 
 
 def generated_file(filename: str, strategyname: str) -> str:
+    """Returns the absolute path for the generated file `filename' for strategy
+    `strategyname'. Folders are created if needed.
+
+    So for `foo.tex' and strategy `bar', the returned path is in
+    "strategies/generated_bar/foo.tex".
+    """
     path = os.path.join(os.path.dirname(__file__),
                         f"../strategies/generated_{strategyname}")
     os.makedirs(path, exist_ok=True)
