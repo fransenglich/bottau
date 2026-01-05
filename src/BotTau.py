@@ -34,13 +34,33 @@ def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
     # ---- corr matrix ----
 
     designmatrix['pct_close_futur'] = df['pct_close_futur']
+
     df['var'] = df['pct_close_futur'].rolling(window=common.WINDOW_SIZE).var()
+    designmatrix['var'] = df['var']
+
     df['vol_parkinson_30'] = fe.volatility.parkinson_volatility(df,
                                                                 high_col="High",
                                                                 low_col="Low",
                                                                 window_size=30)
-    designmatrix['var'] = df['var']
     designmatrix['vol_parkinson_30'] = df['vol_parkinson_30']
+
+    df['vol_parkinson_60'] = fe.volatility.parkinson_volatility(df,
+                                                                high_col="High",
+                                                                low_col="Low",
+                                                                window_size=60)
+    designmatrix['vol_parkinson_60'] = df['vol_parkinson_60']
+
+    df['vol_ctc_30'] = fe.volatility.close_to_close_volatility(df,
+                                                               high_col="High",
+                                                               low_col="Low",
+                                                               window_size=30)
+    designmatrix['vol_ctc_30'] = df['vol_ctc_30']
+
+    df['vol_ctc_60'] = fe.volatility.close_to_close_volatility(df,
+                                                               high_col="High",
+                                                               low_col="Low",
+                                                               window_size=60)
+    designmatrix['vol_ctc_60'] = df['vol_ctc_60']
 
     flen = len(designmatrix.columns)
     in_range = range(flen)
