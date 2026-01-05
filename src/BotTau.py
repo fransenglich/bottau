@@ -89,8 +89,7 @@ def main() -> int:
     # investigate(df)
 
     # -------------- Target ---------------
-    df['target_future_returns_sign'] = te.directional.future_returns_sign(df,
-                                                                          close_col="close")
+    df['target_future_returns_sign'] = te.directional.future_returns_sign(df)
 
     # -------------- Regression ---------------
     # scikit-learn
