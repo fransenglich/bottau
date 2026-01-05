@@ -23,7 +23,7 @@ def investigate(df: pd.DataFrame) -> None:
     plt.show()
  
 
-def main() -> int:
+def main() -> None:
     plt.ioff()
 
     df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
@@ -108,8 +108,6 @@ def main() -> int:
     # X_train = df[["feature1", "feature2"]].iloc[:split_point]
 
     # broker: BrokerABC.BrokerABC = Broker.init()
-
-    return 0
 
     # https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation
     # ChatGPT: "I'm stuck in my financial quant project. What shall I do?":
