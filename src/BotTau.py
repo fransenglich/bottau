@@ -1,5 +1,3 @@
-import sys
-
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
