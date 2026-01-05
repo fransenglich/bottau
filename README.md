@@ -24,6 +24,7 @@ Standardized feature names are as follows.
 |                                               | high      |
 |                                               | low       |
 | Close/Adjusted close                          | close     |
+| Volatility features                           | vol_*     |
 | The strategy’s PnL                            | returns   |
 | | pct_close_futur |
 
