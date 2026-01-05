@@ -21,8 +21,10 @@ from strategies.bollinger_rsi import strategy_Bollinger_RSI
 df_tickers = []
 
 
-def plot_and_write(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
-    """Writes data and graphs that are strategy-agnostic."""
+def ml_investigate(df: pd.DataFrame, featurenames: tuple[str]) -> pd.DataFrame:
+    """Writes data and graphs that are strategy-agnostic.
+    
+    This is specific to features used in regressions."""
 
     # This is our design matrix.
     designmatrix: pd.DataFrame = pd.DataFrame()
@@ -226,9 +228,8 @@ def main() -> int:
         # Possibly write est2.pvalues['signal']
         f.write(str(est2.summary()))
 
-
     df.to_csv("generated/df.csv")
-    plot_and_write(df, ())
+    ml_investigate(df, ())
 
     backtest.backtest(df)
 
