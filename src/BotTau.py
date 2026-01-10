@@ -1,3 +1,7 @@
+import logging
+import logging.config
+import os
+
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -24,6 +28,13 @@ def investigate(df: pd.DataFrame) -> None:
  
 
 def main() -> None:
+    # Set up logging.
+    logging.config.fileConfig(os.path.join(os.path.dirname(__file__),
+                              "logging.conf"))
+
+    logger = logging.getLogger('BotTau')
+    logger.info("Started")
+
     plt.ioff()
 
     df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
@@ -129,6 +140,7 @@ def main() -> None:
 # Final function for the strategy takes at least the `symbol' as argument, and
 # returns a tuple with 2 Bools, for buy and sell. The function is pre-trained,
 # loads the model with joblib.load() or so, does a prediction and returns.
+    logger.info("Exited")
 
 if __name__ == "__main__":
     main()
