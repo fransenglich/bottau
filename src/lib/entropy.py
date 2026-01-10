@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -6,7 +8,7 @@ import scipy.stats
 import common
 
 
-def plot_entropy(df: pd.DataFrame) -> None:
+def main() -> None:
     """
     Computes and plots the Shannon entropy for discrete returns, volatility and
     skewness in the returns passed in the argument.
@@ -28,21 +30,16 @@ def plot_entropy(df: pd.DataFrame) -> None:
             75574817b_what-entropy-really-tells-you-about-a-\
             time-activity-7401568412436561922-wO7K/
     """
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__),
+                                  "../../Tickers/IBM.csv"),
+                     index_col="date",
+                     parse_dates=True)
 
-    # See the code in main(). It does the function, but it hasn't been
-    # abstracted/factorised.
-    pass
-
-
-def main() -> None:
-    df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
-    df.index = pd.DatetimeIndex(df.index)  # .to_period('D')
+    # This CSV is in reverse order.
     df = df[::-1]
 
     # Standardize feature names
     df.rename(columns={"4. close": "Adj Close"}, inplace=True)
-
-    # df = df[0:300]
 
     df.dropna(inplace=True)
 
@@ -79,6 +76,7 @@ def main() -> None:
     plt.legend(["Entropy Returns",
                 "Entropy for Volatility",
                 "Entropy for Skewness"])
+    plt.title("Entropy of Statistical Moments in IBM Returns")
 
     plt.grid()
     plt.show()
