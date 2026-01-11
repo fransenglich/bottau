@@ -35,8 +35,7 @@ def investigate(df: pd.DataFrame,
 
     # TODO we have 3 DataFrames now: designmatrix, df and df_vol_scaled. Clean up
 
-    # TODO it's a constant, it should be rolling.
-    df['vol_std'] = df['close'].std()
+    df['vol_std'] = df['close'].rolling(window=common.WINDOW_SIZE).std()
     designmatrix['vol_std'] = df['vol_std']
 
     df['vol_parkinson_30'] = fe.volatility.parkinson_volatility(df,
@@ -61,7 +60,8 @@ def investigate(df: pd.DataFrame,
                     "vol_ctc_30",
                     "vol_ctc_60"]
 
-    # We got NaNs from the partial windows in the beginning.
+    # We got NaNs in the beginning from the partial windows for the vol
+    # features.
     df.dropna(inplace=True)
 
     # PCA
@@ -112,7 +112,7 @@ def investigate(df: pd.DataFrame,
     plt.legend()
     common.savefig(plt, "volatilities_graph", strategyname)
 
-    # df[vol_features].corr() # TODO to Latex table
+    # df[vol_features].corr() # TODO to Latex table?
 
     # TODO Should df_vol_scaled be used now?
 
