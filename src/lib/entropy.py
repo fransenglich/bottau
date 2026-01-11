@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats
 
-import common
+from lib import common
 
 
 def main() -> None:
@@ -21,6 +21,10 @@ def main() -> None:
     A time series with low entropy has potential for having
     patterns/information/predicatability. High entropy implies
     noise/unpredictability.
+
+    In the context of trading, the entropy is a quantification to how
+    "learnable" a data set is. Useful indicator to whether there's something to
+    predict at all. A model can't solve a too high entropy.
 
     See:
     - https://en.wikipedia.org/wiki/Entropy_(information_theory)
