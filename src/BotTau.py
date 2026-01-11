@@ -2,6 +2,11 @@ import logging
 import logging.config
 import os
 
+# Set up logging. We do this before importing our own modules.
+logging.config.fileConfig(os.path.join(os.path.dirname(__file__),
+                                       "logging.conf"))
+logger = logging.getLogger('BotTau')
+
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -28,11 +33,6 @@ def investigate(df: pd.DataFrame) -> None:
  
 
 def main() -> None:
-    # Set up logging.
-    logging.config.fileConfig(os.path.join(os.path.dirname(__file__),
-                              "logging.conf"))
-
-    logger = logging.getLogger('BotTau')
     logger.info("Started")
 
     plt.ioff()

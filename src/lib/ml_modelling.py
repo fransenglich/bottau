@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger("BotTau")
+
 import quantreo.features_engineering as fe
 import numpy as np
 import matplotlib.pyplot as plt
@@ -73,8 +76,8 @@ def investigate(df: pd.DataFrame,
     test_df = df.iloc[train_size:].copy()
 
     # Check the result
-    print(f"Train set shape: {train_df.shape}")
-    print(f"Test set shape : {test_df.shape}")
+    logger.info(f"Train set shape: {train_df.shape}")
+    logger.info(f"Test set shape : {test_df.shape}")
 
     # Standardize the features using only the training set
     scaler = StandardScaler()
