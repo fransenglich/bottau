@@ -23,7 +23,6 @@
 \input{../src/strategies/generated_\strategy/constants.tex}
 
 \usepackage{graphicx}
-\usepackage{float}
 \usepackage{amsmath}
 \usepackage[english]{babel}
 \usepackage[hidelinks=true, bookmarks=true]{hyperref}
@@ -58,7 +57,7 @@
         \begin{center}
             \includegraphics{../src/strategies/generated_\strategy/#1.png}
         \end{center}
-        %\caption{}
+        %\caption{\detokenize{#1}}
     \end{figure}
 }
 
