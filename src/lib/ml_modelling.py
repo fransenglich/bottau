@@ -112,6 +112,7 @@ def investigate(df: pd.DataFrame,
     plt.plot(df_vol_scaled["vol_parkinson_30"], label="Parkinson vol 30", alpha=0.5)
     plt.plot(df_vol_scaled["vol_parkinson_60"], label="Parkinson vol 60", alpha=0.5)
     plt.plot(df["vol_pca"], label="PCA vol feature")
+    plt.title("PCA Over Volatility Features")
     plt.legend()
     common.savefig(plt, "volatilities_graph", strategyname)
 
