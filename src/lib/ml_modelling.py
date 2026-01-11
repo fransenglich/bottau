@@ -80,6 +80,7 @@ def investigate(df: pd.DataFrame,
     logger.info(f"Test set shape : {test_df.shape}")
 
     # Standardize the features using only the training set
+    # This means converting to Z scores with mean 0 and stdev 1.
     scaler = StandardScaler()
     scaler.fit(train_df[vol_features])  # Fit on training data only
 
@@ -92,9 +93,6 @@ def investigate(df: pd.DataFrame,
     # Convert the scaled full dataset to a DataFrame for easier handling
     df_vol_scaled = pd.DataFrame(df_vol_scaled, index=df.index, columns=vol_features)
 
-    # Display the standardized volatility features
-    df_vol_scaled
-   
     pca = KernelPCA(n_components=1)
     pca.fit(train_df_scaled)
 
@@ -104,17 +102,19 @@ def investigate(df: pd.DataFrame,
     vol_features.append("vol_pca")
 
     plt.figure(figsize=common.FIG_SIZE)
+    a = 0.3
     # plt.plot(df_vol_scaled["vol_yang_zhang_30"], label="YZ vol 30", alpha=0.5)
     # plt.plot(df_vol_scaled["vol_rogers_satchell_60"], label="RS vol 60", alpha=0.5)
-    plt.plot(df_vol_scaled["vol_std"], label="STDEV", alpha=0.5)
-    plt.plot(df_vol_scaled["vol_ctc_30"], label="CTC vol 30", alpha=0.5)
-    plt.plot(df_vol_scaled["vol_ctc_60"], label="CTC vol 60", alpha=0.5)
-    plt.plot(df_vol_scaled["vol_parkinson_30"], label="Parkinson vol 30", alpha=0.5)
-    plt.plot(df_vol_scaled["vol_parkinson_60"], label="Parkinson vol 60", alpha=0.5)
+    plt.plot(df_vol_scaled["vol_std"], label="STDEV", alpha=a)
+    plt.plot(df_vol_scaled["vol_ctc_30"], label="CTC vol 30", alpha=a)
+    plt.plot(df_vol_scaled["vol_ctc_60"], label="CTC vol 60", alpha=a)
+    plt.plot(df_vol_scaled["vol_parkinson_30"], label="Parkinson vol 30", alpha=a)
+    plt.plot(df_vol_scaled["vol_parkinson_60"], label="Parkinson vol 60", alpha=a)
     plt.plot(df["vol_pca"], label="PCA vol feature")
     plt.title("PCA Over Volatility Features")
     plt.legend()
-    common.savefig(plt, "pca_graph", strategyname)
+    plt.grid()
+    common.savefig(plt, "PCA", strategyname)
 
     # df[vol_features].corr() # TODO to Latex table?
 
