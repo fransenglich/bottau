@@ -114,7 +114,7 @@ def investigate(df: pd.DataFrame,
     plt.plot(df["vol_pca"], label="PCA vol feature")
     plt.title("PCA Over Volatility Features")
     plt.legend()
-    common.savefig(plt, "volatilities_graph", strategyname)
+    common.savefig(plt, "pca_graph", strategyname)
 
     # df[vol_features].corr() # TODO to Latex table?
 
