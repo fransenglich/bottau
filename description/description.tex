@@ -18,7 +18,9 @@
 
 %\addbibresource{references.bib}
 
-\input{../generated/constants.tex}
+\def\strategy{ibm}
+
+\input{../src/strategies/generated_\strategy/constants.tex}
 
 \usepackage{graphicx}
 \usepackage{float}
@@ -54,7 +56,7 @@
 \newcommand{\figureTau}[1]{
     \begin{figure}[H]
         \begin{center}
-            \includegraphics{../generated/#1.png}
+            \includegraphics{../src/strategies/generated_\strategy/#1.png}
         \end{center}
         %\caption{}
     \end{figure}
@@ -195,7 +197,7 @@ See:
 \begin{itemize}
     \item \url{https://www.geeksforgeeks.org/python/detecting-multicollinearity-with-vif-python/}
     \item \url{https://en.wikipedia.org/wiki/Variance_inflation_factor}
-
+\end{itemize}
 
 Interpretation:
 
