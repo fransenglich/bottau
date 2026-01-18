@@ -47,7 +47,7 @@ def main() -> None:
 
     df.dropna(inplace=True)
 
-    df["returns"] = df["Adj Close"].pct_change()
+    df["returns"] = df["Adj Close"].pct_change()  # NOTE inconsistent naming
 
     def rolling_entropy(window_data):
         # 1. Create a histogram to get frequencies.
@@ -77,10 +77,10 @@ def main() -> None:
     plt.plot(df["entropy_vol_returns"], label="Volatility")
     plt.plot(df["entropy_skewness"], label="Skewness")
 
-    plt.legend(["Entropy Returns",
-                "Entropy for Volatility",
-                "Entropy for Skewness"])
-    plt.title("Entropy of Statistical Moments in IBM Returns")
+    plt.legend(["Entropy of Returns",
+                "Entropy of Volatility",
+                "Entropy of Skewness"])
+    plt.title("Entropy of Moments of IBM Returns")
 
     plt.grid()
     plt.show()
