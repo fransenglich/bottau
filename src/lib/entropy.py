@@ -19,7 +19,7 @@ def main() -> None:
     to randomness.
 
     A time series with low entropy has potential for having
-    patterns/information/predicatability. High entropy implies
+    patterns/information/predictability. High entropy implies
     noise/unpredictability.
 
     In the context of trading, the entropy is a quantification to how
