@@ -28,6 +28,7 @@ Standardized feature names are as follows.
 | The closes (input data) as returns            | pct_close_futur   | 
 | Volatility STDEV                              | vol_std           |
 | Other volatility features                     | features vol_*    |
+| Target variables/future                       | *_futur           |
 
 ## File Naming Conventions for Strategies
 
