@@ -7,7 +7,7 @@ The easiest way to use this code is to in bottau/ issue:
 
 `pip install -e .`
 
-This install the code as an editable package, meaning symlinks are created to
+This installs the code as an editable package, meaning symlinks are created to
 the actual files.
 
 
@@ -19,14 +19,16 @@ Standardized feature names are as follows.
 
 | Feature Name	| Pandas column name |
 | ----------- | ----------- |
-| Date/Timestamp, which is the DataFrame index	| time      |
-|                                               | open      |
-|                                               | high      |
-|                                               | low       |
-| Close/Adjusted close                          | close     |
-| Volatility features                           | vol_*     |
-| The strategy’s PnL                            | returns   |
-| | pct_close_futur |
+| Date/Timestamp, which is the DataFrame index	| time              |
+|                                               | open              |
+|                                               | high              |
+|                                               | low               |
+| Close/Adjusted close                          | close             |
+| Volatility features                           | vol_*             |
+| The strategy’s PnL                            | returns           |
+| The closes (input data) as returns            | pct_close_futur   | 
+| Volatility STDEV                              | vol_std           |
+| Other volatility                              | features	vol_*   |
 
 ## File Naming Conventions for Strategies
 
