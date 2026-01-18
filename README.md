@@ -24,11 +24,10 @@ Standardized feature names are as follows.
 |                                               | high              |
 |                                               | low               |
 | Close/Adjusted close                          | close             |
-| Volatility features                           | vol_*             |
 | The strategy’s PnL                            | returns           |
 | The closes (input data) as returns            | pct_close_futur   | 
 | Volatility STDEV                              | vol_std           |
-| Other volatility                              | features	vol_*   |
+| Other volatility features                     | features vol_*    |
 
 ## File Naming Conventions for Strategies
 
