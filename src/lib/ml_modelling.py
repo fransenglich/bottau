@@ -1,13 +1,14 @@
 import logging
 logger = logging.getLogger("BotTau")
 
-import quantreo.features_engineering as fe
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.decomposition import KernelPCA
 from sklearn.preprocessing import StandardScaler
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import quantreo.features_engineering as fe
+import scipy.stats
 
 from lib import common
 from lib import heatmap
@@ -119,6 +120,43 @@ def investigate(df: pd.DataFrame,
     # df[vol_features].corr() # TODO to Latex table?
 
     # TODO Should df_vol_scaled be used now?
+
+    # Entropy
+
+    def rolling_entropy(window_data):
+        # 1. Create a histogram to get frequencies.
+        counts, _ = np.histogram(window_data, common.WINDOW_SIZE)
+
+        # 2. Calculate Shannon entropy on the counts.
+        return scipy.stats.entropy(counts)
+
+    # pct_close_futur
+    df["entropy_pct_close_futur"] = df["pct_close_futur"].rolling(window=common.WINDOW_SIZE) \
+        .apply(rolling_entropy)
+
+    # Volatility
+    df["vol_pct_close_futur"] = df["pct_close_futur"].rolling(window=common.WINDOW_SIZE).std()
+
+    df["entropy_vol_std"] = df["vol_std"].rolling(window=common.WINDOW_SIZE) \
+        .apply(rolling_entropy)
+
+    # Skewness
+    df["skewness"] = df["pct_close_futur"].rolling(window=common.WINDOW_SIZE).skew()
+    df["entropy_skewness"] = df["skewness"].rolling(window=common.WINDOW_SIZE) \
+        .apply(rolling_entropy)
+
+    # Plot entropy
+    plt.figure()
+    plt.plot(df["entropy_pct_close_futur"], label="Entropy pct_close_futur")
+    plt.plot(df["entropy_vol_std"], label="Volatility")
+    plt.plot(df["entropy_skewness"], label="Skewness")
+
+    plt.legend(["Entropy of Returns",
+                "Entropy of Volatility",
+                "Entropy of Skewness"])
+    plt.title("Entropy of Moments")
+    plt.grid()
+    common.savefig(plt, "entropy_moments", strategyname)
 
     # Corr matrix
     flen = len(designmatrix.columns)

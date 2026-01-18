@@ -123,6 +123,29 @@ Risk management conditions:
 
 The dataset stretches from \constantStartdate \  to \constantEnddate.
 
+\subsection{Entropy of Moments}
+
+The Shannon entropy for discrete returns, volatility and skewness in the returns.
+
+Entropy essentially shows how much information is in the data, as opposed
+to randomness.
+
+A time series with low entropy has potential for having
+patterns/information/predictability. High entropy implies
+noise/unpredictability.
+
+In the context of trading, the entropy is a quantification to how
+"learnable" a data set is. Useful indicator to whether there's something to
+predict at all. A model can't solve a too high entropy.
+
+\begin{itemize}
+    \item \url{https://en.wikipedia.org/wiki/Entropy_(information_theory)}
+    \item \url{https://stackoverflow.com/questions/15450192/fastest-way-to-compute-entropy-in-python}
+    \item \url{https://www.linkedin.com/posts/lucas-inglese-75574817b_what-entropy-really-tells-you-about-a- time-activity-7401568412436561922-wO7K/}
+\end{itemize}
+
+\figureTau{entropy_moments}
+
 \section{Strategy}
 
 \begin{itemize}
@@ -216,7 +239,7 @@ Interpretation:
 
         \input{../generated/VIFs}
 
-        \hline
+        %\hline
 
     \end{tabular}
 \end{center}

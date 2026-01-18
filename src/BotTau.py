@@ -61,7 +61,8 @@ def main() -> None:
     df = df.dropna()
     print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
-    df["pct_close_futur"] = (df["close"].shift(-2) - df["close"]) / df["close"]
+    #df["pct_close_futur"] = (df["close"].shift(-2) - df["close"]) / df["close"]
+    df["pct_close_futur"] = df["close"].pct_change()
 
     df = strategy_Bollinger_RSI(df)
     #test_opt_Bollinger_RSI(df)
