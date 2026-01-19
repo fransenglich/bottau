@@ -59,7 +59,7 @@ def main() -> None:
     # ---------- Drop NaNs ---------
     len_before = len(df)
     df = df.dropna()
-    print(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
+    logger.info(f"Dropped from `df': {len_before - len(df)} rows, out of total {len_before}.")
 
     #df["pct_close_futur"] = (df["close"].shift(-2) - df["close"]) / df["close"]
     df["pct_close_futur"] = df["close"].pct_change()
