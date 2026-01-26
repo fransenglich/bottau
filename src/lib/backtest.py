@@ -6,6 +6,23 @@ import pandas as pd
 
 from lib import common
 
+def backtest_logger(func):
+    """Writes out to the backtest (a trial) to
+    strategies/backtest_registry_X.csv."""
+
+    def save_to_registry(*args, **kwargs):
+        pass
+
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        # Log:
+        # Trial ID	Date	Strategy Type	Parameters	Sharpe	Volatility	Max Drawdown	Total Trials in Batch
+        # Parameters is a serialized dict?
+        save_to_registry(kwargs, result)
+        return result
+
+    return wrapper
+
 
 # Copied from Lucas.
 def backtest_static_portfolio(weights,
