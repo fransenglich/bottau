@@ -2,14 +2,15 @@ import pandas as pd
 
 from abc import ABC, abstractmethod
 
+
 class AbstractStrategy(ABC):
     """Abstract base class for all strategies."""
 
     data: pd.DataFrame
+    """Contains the in-sample data and is populated with features."""
 
     def __init__(self, df: pd.DataFrame):
         self.data = df
-
 
     @abstractmethod
     def compute_features(self):
