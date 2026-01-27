@@ -3,7 +3,7 @@ import ta
 from lib.AbstractStrategy import AbstractStrategy
 
 
-class StrategySMARSI(AbstractStrategy):
+class StrategySMA_RSI(AbstractStrategy):
     """A SMA and RSI technical analysis-strategy."""
 
     # FEATURE 1: SMA 30
