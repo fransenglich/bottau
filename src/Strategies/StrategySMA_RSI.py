@@ -11,5 +11,10 @@ class StrategySMA_RSI(AbstractStrategy):
             .sma_indicator()
         self.data["SMA_5"] = ta.trend.SMAIndicator(self.data["close"], 5) \
             .sma_indicator()
+        self.data["RSI"] = ta.momentum.RSIIndicator(self.data["close"], 10) \
+            .rsi()  # TODO RSI constant
 
         condition = self.data['SMA5'] > self.data['SMA30']
+
+    def display(self):
+        pass
