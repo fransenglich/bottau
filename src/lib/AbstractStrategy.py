@@ -20,13 +20,15 @@ class AbstractStrategy(ABC):
         self.parameters = parameters
 
     @abstractmethod
-    def compute_features(self):
+    def prepare_features(self):
         """Computes the features and stores them as member data."""
         pass
 
     @abstractmethod
     def display(self):
-        """Displays graphs or plots for the purpose of diagnostics.
+        """Displays graphs or plots and/or prints data for the purpose of
+        diagnostics.
 
-        This is typically done by showing graphs wiht Matplotlib."""
+        This is typically done by showing graphs with Matplotlib. Typically you
+        need to call prepare_features() before running this diagnostic tool."""
         pass
