@@ -52,6 +52,7 @@ def main_sma() -> None:
                             "3. low":   "low",
                             "4. close": "close"})
     df.drop(["5. volume"], axis=1)
+    df = df.head(100)
 
     params = {}
 
