@@ -20,12 +20,12 @@ class AbstractStrategy(ABC):
         self.parameters = parameters
 
     @abstractmethod
-    def prepare_features(self):
+    def prepare_features(self) -> None:
         """Computes the features and stores them as member data."""
         pass
 
     @abstractmethod
-    def display(self):
+    def display(self) -> None:
         """Displays graphs or plots and/or prints data for the purpose of
         diagnostics.
 

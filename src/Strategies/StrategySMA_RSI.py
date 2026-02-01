@@ -6,7 +6,7 @@ from lib.AbstractStrategy import AbstractStrategy
 class StrategySMA_RSI(AbstractStrategy):
     """A SMA and RSI technical analysis-strategy."""
 
-    def prepare_features(self):
+    def prepare_features(self) -> None:
         self.data["SMA_30"] = ta.trend.SMAIndicator(self.data["close"], 30) \
             .sma_indicator()
         self.data["SMA_5"] = ta.trend.SMAIndicator(self.data["close"], 5) \
@@ -16,5 +16,5 @@ class StrategySMA_RSI(AbstractStrategy):
 
         condition = self.data['SMA5'] > self.data['SMA30']
 
-    def display(self):
+    def display(self) -> None:
         pass
