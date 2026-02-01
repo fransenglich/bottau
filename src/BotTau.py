@@ -2,6 +2,9 @@ import logging
 import logging.config
 import os
 
+from strategies.StrategySMA_RSI import StrategySMA_RSI
+
+
 # Set up logging. We do this before importing our own modules.
 logging.config.fileConfig(os.path.join(os.path.dirname(__file__),
                                        "logging.conf"))
@@ -32,7 +35,37 @@ def investigate(df: pd.DataFrame) -> None:
     plt.show()
  
 
+def main_sma() -> None:
+    logger.info("Started")
+
+    plt.ioff()
+
+    df = pd.read_csv("Tickers/IBM.csv", index_col="date", parse_dates=True)
+
+    # Reverse, get increasing dates. Specific to IBM.csv.
+    df = df[::-1]
+
+    # For some reason the name differs.
+    df = df.rename(columns={"date":     "time",
+                            "1. open":  "open",
+                            "2. high":  "high",
+                            "3. low":   "low",
+                            "4. close": "close"})
+    df.drop(["5. volume"], axis=1)
+
+    params = {}
+
+    strat = StrategySMA_RSI(df, params)
+    strat.prepare_features()
+    strat.display()
+
+    logger.info("Exited")
+
+
 def main() -> None:
+    main_sma()
+    return
+
     logger.info("Started")
 
     plt.ioff()
