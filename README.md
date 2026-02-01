@@ -19,17 +19,17 @@ Standardized feature names are as follows.
 
 | Feature Name	| Pandas column name |
 | ----------- | ----------- |
-| Date/Timestamp, which is the DataFrame index	    | time              |
-|                                                   | open              |
-|                                                   | high              |
-|                                                   | low               |
-| Close/Adjusted close                              | close             |
-| The strategy’s PnL                                | returns           |
-| The closes (input data) as returns                | pct_close_futur   | 
-| Volatility STDEV                                  | vol_std           |
-| Other volatility features                         | features vol_*    |
-| Target variables/future                           | *_futur           |
-| The strategy's advice/signal. 1 = buy, -1 = sell  | signal            |
+| time              | Date/Timestamp, which is the DataFrame index      |
+| open              |                                                   |
+| high              |                                                   |
+| low               |                                                   |
+| close             | Close/Adjusted close                              |
+| returns           | The strategy’s PnL                                |
+| pct_close_futur   | The closes (input data) as returns                |
+| vol_std           | Volatility STDEV                                  |
+| features vol_*    | Other volatility features                         |
+| *_futur           | Target variables/future                           |
+| signal            | The strategy's advice/signal. 1 = buy, -1 = sell  |
 
 ## File Naming Conventions for Strategies
 
