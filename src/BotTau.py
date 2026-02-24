@@ -3,6 +3,7 @@ import logging.config
 import os
 
 from strategies.StrategySMA_RSI import StrategySMA_RSI
+from lib.backtest import backtest
 
 
 # Set up logging. We do this before importing our own modules.
@@ -59,6 +60,8 @@ def main_sma() -> None:
     strat = StrategySMA_RSI(df, params)
     strat.prepare_features()
     strat.display()
+    strat.backtest()
+    backtest(strat)
 
     logger.info("Exited")
 

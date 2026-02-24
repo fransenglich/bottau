@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 
 from lib import common
+from lib.AbstractStrategy import AbstractStrategy
+
 
 def backtest_logger(func):
     """Writes out to the backtest (a trial) to
@@ -197,7 +199,7 @@ def backtest_static_portfolio(weights,
         plt.show()
 
 
-def backtest(df: pd.DataFrame, sn: str) -> None:
+def backtest(strategy: AbstractStrategy, sn: str) -> None:
     """A function by Lucas Inglese modified by me that plots and prints a
     backtest.
 
@@ -205,6 +207,8 @@ def backtest(df: pd.DataFrame, sn: str) -> None:
 
     The passed DataFrame must have a column named returns, which is the returns
     of the strategy to be backtested."""
+
+    df = strategy.data
 
     if "returns" not in df.columns:
         raise ValueError("The passed DataFrame must have a 'returns' column.")
