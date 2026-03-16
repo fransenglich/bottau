@@ -1,7 +1,15 @@
 from typing import Any
+import logging
+import logging.config
+import os
 
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# Set up logging. We do this before importing our own modules.
+logging.config.fileConfig(os.path.join(os.path.dirname(__file__),
+                                       "../logging.conf"))
+logger = logging.getLogger('BotTau')
 
 from abc import ABC, abstractmethod
 from lib import common
@@ -18,6 +26,8 @@ class AbstractStrategy(ABC):
     """Holds the parameters. The key is the name."""
 
     def __init__(self, df: pd.DataFrame, parameters: dict[str, Any]):
+        logger.info(f"Initialized strategy {self.__class__.__name__}")
+
         self.data = df
         self.parameters = parameters
 
