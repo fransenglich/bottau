@@ -51,9 +51,22 @@ class AbstractStrategy(ABC):
         It expects the column 'returns', typically computed in
         prepare_features(), which hence needs to be called before."""
 
+        if not "returns" in self.data.columns:
+            raise ValueError("No 'returns' column.")
+        
         # TODO whether to simulate position sizing, slippage, transaction costs, etc.
         # TODO drawdown
+
+        # Copied from backtest.py.
         plt.figure(figsize=common.FIG_SIZE)
+        plt.plot(self.data['returns'], label='Returns')
+        plt.axhline(0, linestyle='dashed', color='black', alpha=0.5)
+        plt.title("Returns")
+        plt.ylabel("Returns")
+        plt.legend()
+        plt.grid()
+        plt.show()
+        # common.savefig(plt, "returns", sn)
 
         # plt.plot(self.data['close'], label='Closing Price', color='black')
 

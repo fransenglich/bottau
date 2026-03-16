@@ -61,7 +61,7 @@ def main_sma() -> None:
     strat.prepare_features()
     strat.display()
     strat.backtest()
-    backtest(strat)
+    #backtest.backtest(strat)
 
     logger.info("Exited")
 
