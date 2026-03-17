@@ -53,7 +53,7 @@ class AbstractStrategy(ABC):
 
         if not "returns" in self.data.columns:
             raise ValueError("No 'returns' column.")
-        
+
         # TODO whether to simulate position sizing, slippage, transaction costs, etc.
         # TODO drawdown
 
