@@ -47,7 +47,7 @@ class AbstractStrategy(ABC):
 
     def backtest(self) -> None:
         """Does a traditional backtest and displays/outputs it.
-        
+
         It expects the column 'returns', typically computed in
         prepare_features(), which hence needs to be called before."""
 
