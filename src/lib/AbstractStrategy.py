@@ -68,6 +68,20 @@ class AbstractStrategy(ABC):
         plt.show()
         # common.savefig(plt, "returns", sn)
 
+        # ---- Drawdown ----
+        # 1 + & cumprod() because 'returns' are not log returns.
+        self.data['comp_cumulative_returns'] = (1 + self.data['returns']).cumprod()
+        self.data['cumulative_max'] = self.data['comp_cumulative_returns'].cummax()
+        self.data['drawdown'] = ((self.data['comp_cumulative_returns'] - self.data['cumulative_max']) / self.data['cumulative_max']) * 100
+
+        plt.figure(figsize=common.FIG_SIZE)
+        plt.plot(self.data['drawdown'], label="Drawdown")
+        plt.title("Drawdown")
+        plt.ylabel("Drawdown %")
+        plt.legend()
+        plt.show()
+        # common.savefig(plt, "drawdown", sn)
+
         # plt.plot(self.data['close'], label='Closing Price', color='black')
 
         pass
