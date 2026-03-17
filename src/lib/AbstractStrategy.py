@@ -4,6 +4,7 @@ import logging.config
 import os
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 # Set up logging. We do this before importing our own modules.
@@ -84,4 +85,30 @@ class AbstractStrategy(ABC):
 
         # plt.plot(self.data['close'], label='Closing Price', color='black')
 
-        pass
+        stats: dict[str, Any] = {}
+
+        std = np.round(self.data['returns'].std(), 4)
+        stats["stddev"] = std
+
+        sr = np.round(common.sharpe_ratio(self.data['returns']), 4)
+        stats["Sharpe Ratio"] = sr
+
+        # ---- Drawdown ----
+        max_drawdown = common.max_drawdowns(self.data["returns"])
+        max_drawdown = np.round(max_drawdown, 2)
+        stats["Max drawdown"] = max_drawdown
+
+        cr = common.calmar_ratio(self.data["returns"])
+        cr = np.round(cr, 4)
+        stats["Calmar Ratio"] = cr
+
+        # ---- Sortino Ratio ----
+        sr = common.sortino_ratio(self.data["returns"])
+        sr = np.round(sr, 4)
+        stats["Sortino Ratio"] = sr
+
+        # Log the stats.
+        max_len = max([len(s) for s in stats.keys()]) + 2
+        logger.info("-------- Backtest stats --------")
+        for s in stats:
+            logger.info(f"{(s + ": ").ljust(max_len, " ")}{stats[s]}")
