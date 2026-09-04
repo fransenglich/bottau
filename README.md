@@ -3,7 +3,7 @@ Bot Tau is a financial quantitative trading bot written with Pandas & friends.
 
 # Usage
 
-The easiest way to use this code is to in bottau/ issue:
+The easiest way to use this code is to in bottau/ (this folder) issue:
 
 `pip install -e .`
 
